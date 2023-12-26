@@ -1,0 +1,17 @@
+name: RainbowArmor
+version: 1.0
+main: io.stealingdapenta.rainbow.Rainbow
+author: StealingDaPenta
+description: Fancy rainbow armor
+api-version: 1.20
+
+commands:
+  rainbow:
+    usage: /<command>
+    description: Equip / unequip rainbow armor
+    default: op
+
+permissions:
+  rainbow.use:
+    description: Allow usage of /rainbow
+    default: op
