@@ -1,5 +1,8 @@
 package io.stealingdapenta;
 
+import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
+import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
+
 import java.util.function.Consumer;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -12,8 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Armor extends BukkitRunnable {
 
     private final Player player;
-    private long count = 0;
-
+    private double count = 0.0;
     private static final int SAFETY_THRESHOLD = 5000;
 
     public Armor(Player player) {
@@ -23,8 +25,8 @@ public class Armor extends BukkitRunnable {
     public void run() {
         PlayerInventory playerInventory = player.getInventory();
 
-        if (!ArmorListener.playersWearingRainbowArmor.contains(player.getName())) {
-            playerInventory.setArmorContents(ArmorListener.AIR_ARMOR);
+        if (!playersWearingRainbowArmor.contains(player.getName())) {
+            playerInventory.setArmorContents(AIR_ARMOR);
             cancel();
             return;
         }
@@ -36,14 +38,13 @@ public class Armor extends BukkitRunnable {
         int blue = (int) ((normalizedCount + 2.0 / 3.0) * 255) % 255;
 
         setArmor(playerInventory, red, green, blue);
-        count++;
+        count += 1.5; // Adjust the increment value for smoother transitions
 
         // Reset count when it becomes very large
         if (count > (Long.MAX_VALUE - SAFETY_THRESHOLD)) {
-            count = 0;
+            count = 0.0;
         }
     }
-
 
     private void setArmor(PlayerInventory playerInventory, int red, int green, int blue) {
         setArmor(playerInventory::setHelmet, Material.LEATHER_HELMET, red, green, blue);
@@ -57,7 +58,6 @@ public class Armor extends BukkitRunnable {
     }
 
     private ItemStack createColoredArmor(Material material, int r, int g, int b) {
-
         ItemStack item = new ItemStack(material, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
         meta.setColor(Color.fromRGB(r, g, b));
