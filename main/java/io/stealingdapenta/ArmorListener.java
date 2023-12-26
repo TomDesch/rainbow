@@ -57,7 +57,7 @@ public class ArmorListener implements Listener {
         ItemStack itemInHand = player.getInventory()
                                      .getItemInMainHand();
 
-        if (playersWearingRainbowArmor.contains(player.getName()) && isArmorItem(itemInHand) && event.getAction() == Action.RIGHT_CLICK_AIR) {
+        if (playersWearingRainbowArmor.contains(player.getName()) && isArmorItem(itemInHand)) {
             event.setCancelled(true);
         }
     }
@@ -78,8 +78,7 @@ public class ArmorListener implements Listener {
         // Additional check for shift-clicking armor in any slot
         if (playersWearingRainbowArmor.contains(player.getName())
                 && event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY
-                && event.getSlotType()
-                        .equals(SlotType.CONTAINER)
+                && event.getSlotType().equals(SlotType.CONTAINER)
                 && isArmorItem(event.getCurrentItem())) {
             event.setCancelled(true);
         }
