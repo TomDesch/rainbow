@@ -1,8 +1,5 @@
 package io.stealingdapenta;
 
-import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
-import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
-
 import java.util.function.Consumer;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -15,8 +12,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Armor extends BukkitRunnable {
 
     private final Player player;
+    private static final int MAX_COUNT = 255;
     private int count = 0;
-    private static final int MAX_COUNT = 18;
 
     public Armor(Player player) {
         this.player = player;
@@ -25,45 +22,40 @@ public class Armor extends BukkitRunnable {
     public void run() {
         PlayerInventory playerInventory = player.getInventory();
 
-        if (!playersWearingRainbowArmor.contains(player.getName())) {
-            playerInventory.setArmorContents(AIR_ARMOR);
+        if (!ArmorListener.playersWearingRainbowArmor.contains(player.getName())) {
+            playerInventory.setArmorContents(ArmorListener.AIR_ARMOR);
             cancel();
             return;
         }
 
-        int[] colors = {0, 255, 0, 255, 0, 255}; // green, red, blue alternating
+        int red = (int) (Math.sin(Math.toRadians(count)) * 127 + 128);
+        int green = (int) (Math.sin(Math.toRadians(count + 120)) * 127 + 128);
+        int blue = (int) (Math.sin(Math.toRadians(count + 240)) * 127 + 128);
 
-        int index = (count / 3) % 2;
+        setArmor(playerInventory, red, green, blue);
+        count++;
 
-        if (count < MAX_COUNT) {
-            int blue = colors[index];
-            int green = colors[index + 1];
-            int red = colors[index + 2];
-
-            setArmor(playerInventory, blue, green, red);
-            count++;
-        } else {
+        if (count > MAX_COUNT) {
             count = 0;
         }
     }
 
-    private void setArmor(PlayerInventory playerInventory, int blue, int green, int red) {
-        setArmor(playerInventory::setHelmet, Material.LEATHER_HELMET, blue, green, red);
-        setArmor(playerInventory::setChestplate, Material.LEATHER_CHESTPLATE, blue, green, red);
-        setArmor(playerInventory::setLeggings, Material.LEATHER_LEGGINGS, blue, green, red);
-        setArmor(playerInventory::setBoots, Material.LEATHER_BOOTS, blue, green, red);
+    private void setArmor(PlayerInventory playerInventory, int red, int green, int blue) {
+        setArmor(playerInventory::setHelmet, Material.LEATHER_HELMET, red, green, blue);
+        setArmor(playerInventory::setChestplate, Material.LEATHER_CHESTPLATE, red, green, blue);
+        setArmor(playerInventory::setLeggings, Material.LEATHER_LEGGINGS, red, green, blue);
+        setArmor(playerInventory::setBoots, Material.LEATHER_BOOTS, red, green, blue);
     }
 
-    private void setArmor(Consumer<ItemStack> setter, Material material, int blue, int green, int red) {
-        setter.accept(createColoredArmor(material, blue, green, red));
+    private void setArmor(Consumer<ItemStack> setter, Material material, int red, int green, int blue) {
+        setter.accept(createColoredArmor(material, red, green, blue));
     }
 
-    private ItemStack createColoredArmor(Material material, int b, int g, int r) {
+    private ItemStack createColoredArmor(Material material, int r, int g, int b) {
         ItemStack item = new ItemStack(material, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
-        meta.setColor(Color.fromBGR(b, g, r));
+        meta.setColor(Color.fromRGB(r, g, b));
         item.setItemMeta(meta);
         return item;
     }
-
 }
