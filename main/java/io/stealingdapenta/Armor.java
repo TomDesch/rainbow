@@ -12,8 +12,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Armor extends BukkitRunnable {
 
     private final Player player;
-    private static final int MAX_COUNT = 255;
-    private int count = 0;
+    private long count = 0;
+
+    private static final int SAFETY_THRESHOLD = 5000;
 
     public Armor(Player player) {
         this.player = player;
@@ -37,10 +38,12 @@ public class Armor extends BukkitRunnable {
         setArmor(playerInventory, red, green, blue);
         count++;
 
-        if (count > MAX_COUNT) {
+        // Reset count when it becomes very large
+        if (count > (Long.MAX_VALUE - SAFETY_THRESHOLD)) {
             count = 0;
         }
     }
+
 
     private void setArmor(PlayerInventory playerInventory, int red, int green, int blue) {
         setArmor(playerInventory::setHelmet, Material.LEATHER_HELMET, red, green, blue);
