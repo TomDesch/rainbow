@@ -10,15 +10,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 public class ArmorListener implements Listener {
 
@@ -58,36 +57,47 @@ public class ArmorListener implements Listener {
         ItemStack itemInHand = player.getInventory()
                                      .getItemInMainHand();
 
-        if (playersWearingRainbowArmor.contains(player.getName()) && isRainbowArmor(itemInHand) && event.getAction() == Action.RIGHT_CLICK_AIR) {
+        if (playersWearingRainbowArmor.contains(player.getName()) && isArmorItem(itemInHand) && event.getAction() == Action.RIGHT_CLICK_AIR) {
             event.setCancelled(true);
         }
     }
-
-    private boolean isRainbowArmor(ItemStack item) {
-        return item.getType()
-                   .name()
-                   .startsWith("LEATHER_") && item.hasItemMeta() && item.getItemMeta() instanceof LeatherArmorMeta;
-    }
-
 
     @EventHandler
     public void inventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         Inventory clickedInventory = event.getClickedInventory();
 
-        if (playersWearingRainbowArmor.contains(player.getName()) && Objects.nonNull(clickedInventory) && clickedInventory.getType() == InventoryType.PLAYER
-                && isArmorSlot(event.getRawSlot()) && isInvalidClickType(event.getClick())) {
+        // Cancel event if the player is wearing rainbow armor and clicks an armor slot
+        if (playersWearingRainbowArmor.contains(player.getName())
+                && Objects.nonNull(clickedInventory)
+                && event.getSlotType()
+                        .equals(SlotType.ARMOR)) {
+            event.setCancelled(true);
+        }
+
+        // Additional check for shift-clicking armor in any slot
+        if (playersWearingRainbowArmor.contains(player.getName())
+                && event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY
+                && event.getSlotType()
+                        .equals(SlotType.CONTAINER)
+                && isArmorItem(event.getCurrentItem())) {
             event.setCancelled(true);
         }
     }
 
-    private boolean isInvalidClickType(ClickType clickType) {
-        return clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT || clickType == ClickType.DOUBLE_CLICK
-                || clickType == ClickType.NUMBER_KEY;
+    private boolean isArmorItem(ItemStack item) {
+        return Objects.nonNull(item) && item.getType()
+                                            .name()
+                                            .endsWith("_HELMET")
+                || item.getType()
+                       .name()
+                       .endsWith("_CHESTPLATE")
+                || item.getType()
+                       .name()
+                       .endsWith("_LEGGINGS")
+                || item.getType()
+                       .name()
+                       .endsWith("_BOOTS");
     }
 
-
-    private boolean isArmorSlot(int slot) {
-        return slot >= 5 && slot <= 8;
-    }
 }
