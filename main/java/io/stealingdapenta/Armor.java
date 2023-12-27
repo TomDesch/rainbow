@@ -2,7 +2,9 @@ package io.stealingdapenta;
 
 import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
+import static io.stealingdapenta.rainbow.Rainbow.CYCLE_SPEED;
 
+import io.stealingdapenta.rainbow.Rainbow;
 import java.util.function.Consumer;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -17,6 +19,8 @@ public class Armor extends BukkitRunnable {
     private final Player player;
     private int count = 0;
     private static final int THRESHOLD = 5000;
+    private final int cycleSpeed = Rainbow.getInstance().getConfig().getInt(CYCLE_SPEED);
+
 
     public Armor(Player player) {
         this.player = player;
@@ -33,7 +37,7 @@ public class Armor extends BukkitRunnable {
 
         Color armorColor = convertCountToRGB(count);
         setArmor(playerInventory, armorColor);
-        count++;
+        count += cycleSpeed;
 
         // Reset count to keep it within a reasonable range
         if (count >= Integer.MAX_VALUE - THRESHOLD) {

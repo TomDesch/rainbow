@@ -8,6 +8,7 @@ import io.stealingdapenta.RainbowCommand;
 import java.util.Objects;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,18 +16,21 @@ public class Rainbow extends JavaPlugin {
 
     public static Logger logger;
     private static Rainbow instance = null;
-
+    private final FileConfiguration config = getConfig();
     private final ArmorListener armorListener = new ArmorListener();
     private final RainbowCommand rainbowCommand = new RainbowCommand();
     private static final String PLAYER_NOT_FOUND = "Player %s not found but should exist!";
     private static final String PLUGIN_ENABLED = "Rainbow armor plugin enabled.";
     private static final String PLUGIN_DISABLED = "Rainbow armor plugin disabled.";
     private static final String RAINBOW_COMMAND = "rainbow";
+    public static final String CYCLE_SPEED = "cycleSpeed";
 
 
     public void onEnable() {
         instance = this;
         logger = getLogger();
+
+        initializeConfiguration();
 
         getServer().getPluginManager()
                    .registerEvents(armorListener, instance);
@@ -34,6 +38,13 @@ public class Rainbow extends JavaPlugin {
                .setExecutor(rainbowCommand);
 
         logger.info(PLUGIN_ENABLED);
+    }
+
+    private void initializeConfiguration() {
+        config.addDefault(CYCLE_SPEED, 5);
+        config.options()
+              .copyDefaults(true);
+        saveConfig();
     }
 
     public void onDisable() {

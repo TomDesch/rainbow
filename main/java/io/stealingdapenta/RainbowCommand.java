@@ -2,6 +2,7 @@ package io.stealingdapenta;
 
 import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
+import static io.stealingdapenta.rainbow.Rainbow.CYCLE_SPEED;
 
 import io.stealingdapenta.rainbow.Rainbow;
 import java.util.Arrays;
