@@ -2,7 +2,6 @@ package io.stealingdapenta;
 
 import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
-import static io.stealingdapenta.rainbow.Rainbow.CYCLE_SPEED;
 
 import io.stealingdapenta.rainbow.Rainbow;
 import java.util.Arrays;
@@ -49,12 +48,22 @@ public class RainbowCommand implements CommandExecutor {
         }
 
         playersWearingRainbowArmor.add(player.getName());
+
+        Armor armor;
+
+        if (args.length > 0) {
+            try {
+                armor = new Armor(player, Integer.parseInt(args[0]));
+            } catch (NumberFormatException e) {
+                playersWearingRainbowArmor.remove(player.getName());
+                return false;
+            }
+        } else {
+            armor =  new Armor(player);
+        }
+        armor.runTaskTimer(Rainbow.getInstance(), 0L, 1L);
         player.sendMessage(Component.text(ARMOR_ENABLED)
                                     .color(TextColor.color(75, 255, 75)));
-
-        Armor armor = new Armor(player);
-        armor.runTaskTimer(Rainbow.getInstance(), 0L, 1L);
-
         return true;
     }
 

@@ -1,5 +1,5 @@
 name: RainbowArmor
-version: 2.1
+version: 2.2
 main: io.stealingdapenta.rainbow.Rainbow
 author: StealingDaPenta
 description: Fancy rainbow armor
@@ -7,7 +7,7 @@ api-version: 1.20
 
 commands:
   rainbow:
-    usage: /<command>
+    usage: /<command> <optional cyclespeed>
     description: Equip / unequip rainbow armor
     default: op
   rainbowreload:

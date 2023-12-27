@@ -19,11 +19,16 @@ public class Armor extends BukkitRunnable {
     private final Player player;
     private int count = 0;
     private static final int THRESHOLD = 5000;
-    private final int cycleSpeed = Rainbow.getInstance().getConfig().getInt(CYCLE_SPEED);
+    private int cycleSpeed = Rainbow.getInstance().getConfig().getInt(CYCLE_SPEED);
 
 
     public Armor(Player player) {
         this.player = player;
+    }
+
+    public Armor(Player player, int cycleSpeed) {
+        this.player = player;
+        this.cycleSpeed = cycleSpeed;
     }
 
     public void run() {

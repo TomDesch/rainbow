@@ -26,7 +26,6 @@ public class Rainbow extends JavaPlugin {
     private static final String PLUGIN_DISABLED = "Rainbow armor plugin disabled.";
     private static final String RAINBOW_COMMAND = "rainbow";
     public static final String CYCLE_SPEED = "cycleSpeed";
-
     private static final String RELOAD_COMMAND = "rainbowreload";
 
 
