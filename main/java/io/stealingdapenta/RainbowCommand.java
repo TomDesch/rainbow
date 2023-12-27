@@ -41,7 +41,7 @@ public class RainbowCommand implements CommandExecutor {
             return true;
         }
 
-        if (Arrays.stream(playerInventory.getArmorContents()).anyMatch(Objects::nonNull)) {
+        if (hasOccupiedArmorSlot(playerInventory)) {
             player.sendMessage(Component.text(NO_EMPTY_SPACES)
                                         .color(TextColor.color(255, 0, 0)));
             return true;
@@ -49,11 +49,16 @@ public class RainbowCommand implements CommandExecutor {
 
         playersWearingRainbowArmor.add(player.getName());
         player.sendMessage(Component.text(ARMOR_ENABLED)
-                                    .color(TextColor.color(249, 255, 68)));
+                                    .color(TextColor.color(75, 255, 75)));
 
         Armor armor = new Armor(player);
-        armor.runTaskTimer(Rainbow.getInstance(), 0L, 1L);
+        armor.runTaskTimer(Rainbow.getInstance(), 0L, 2L);
 
         return true;
+    }
+
+    private boolean hasOccupiedArmorSlot(PlayerInventory inventory) {
+        return Arrays.stream(inventory.getArmorContents())
+                     .anyMatch(Objects::nonNull);
     }
 }
