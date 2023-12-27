@@ -15,8 +15,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Armor extends BukkitRunnable {
 
     private final Player player;
-    private double count = 0.0;
-    private static final int SAFETY_THRESHOLD = 5000;
+    private int count = 0;
+    private static final int THRESHOLD = 5000;
 
     public Armor(Player player) {
         this.player = player;
@@ -31,37 +31,39 @@ public class Armor extends BukkitRunnable {
             return;
         }
 
-        double normalizedCount = (Math.sin(Math.toRadians(count)) + 1) / 2.0; // Normalize to [0, 1]
+        Color armorColor = convertCountToRGB(count);
+        setArmor(playerInventory, armorColor);
+        count++;
 
-        int red = (int) (normalizedCount * 255);
-        int green = (int) ((normalizedCount + 1.0 / 3.0) * 255) % 255;
-        int blue = (int) ((normalizedCount + 2.0 / 3.0) * 255) % 255;
-
-        setArmor(playerInventory, red, green, blue);
-        count += 1.5; // Adjust the increment value for smoother transitions
-
-        // Reset count when it becomes very large
-        if (count > (Long.MAX_VALUE - SAFETY_THRESHOLD)) {
-            count = 0.0;
+        // Reset count to keep it within a reasonable range
+        if (count >= Integer.MAX_VALUE - THRESHOLD) {
+            count = 0;
         }
     }
 
-    private void setArmor(PlayerInventory playerInventory, int red, int green, int blue) {
-        setArmor(playerInventory::setHelmet, Material.LEATHER_HELMET, red, green, blue);
-        setArmor(playerInventory::setChestplate, Material.LEATHER_CHESTPLATE, red, green, blue);
-        setArmor(playerInventory::setLeggings, Material.LEATHER_LEGGINGS, red, green, blue);
-        setArmor(playerInventory::setBoots, Material.LEATHER_BOOTS, red, green, blue);
+    private void setArmor(PlayerInventory playerInventory, Color armorColor) {
+        setArmor(playerInventory::setHelmet, Material.LEATHER_HELMET, armorColor);
+        setArmor(playerInventory::setChestplate, Material.LEATHER_CHESTPLATE, armorColor);
+        setArmor(playerInventory::setLeggings, Material.LEATHER_LEGGINGS, armorColor);
+        setArmor(playerInventory::setBoots, Material.LEATHER_BOOTS, armorColor);
     }
 
-    private void setArmor(Consumer<ItemStack> setter, Material material, int red, int green, int blue) {
-        setter.accept(createColoredArmor(material, red, green, blue));
+    private void setArmor(Consumer<ItemStack> setter, Material material, Color armorColor) {
+        setter.accept(createColoredArmor(material, armorColor));
     }
 
-    private ItemStack createColoredArmor(Material material, int r, int g, int b) {
+    private ItemStack createColoredArmor(Material material, Color armorColor) {
         ItemStack item = new ItemStack(material, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
-        meta.setColor(Color.fromRGB(r, g, b));
+        meta.setColor(armorColor);
         item.setItemMeta(meta);
         return item;
+    }
+
+    private Color convertCountToRGB(int count) {
+        int red = (int) (Math.sin(count * 0.01) * 127 + 128);
+        int green = (int) (Math.sin(count * 0.01 + 2) * 127 + 128);
+        int blue = (int) (Math.sin(count * 0.01 + 4) * 127 + 128);
+        return Color.fromRGB(red, green, blue);
     }
 }

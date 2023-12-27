@@ -52,7 +52,7 @@ public class RainbowCommand implements CommandExecutor {
                                     .color(TextColor.color(75, 255, 75)));
 
         Armor armor = new Armor(player);
-        armor.runTaskTimer(Rainbow.getInstance(), 0L, 2L);
+        armor.runTaskTimer(Rainbow.getInstance(), 0L, 1L);
 
         return true;
     }
