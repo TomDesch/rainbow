@@ -8,10 +8,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -67,27 +67,34 @@ public class ArmorListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         Inventory clickedInventory = event.getClickedInventory();
 
+        if (Objects.isNull(clickedInventory) || !playersWearingRainbowArmor.contains(player.getName())) {
+            return;
+        }
+
         // Cancel event if the player is wearing rainbow armor and clicks an armor slot
-        if (playersWearingRainbowArmor.contains(player.getName())
-                && Objects.nonNull(clickedInventory)
-                && event.getSlotType()
-                        .equals(SlotType.ARMOR)) {
+        if (event.getSlotType()
+                 .equals(SlotType.ARMOR)) {
             event.setCancelled(true);
         }
 
         // Additional check for shift-clicking armor in any slot
-        if (playersWearingRainbowArmor.contains(player.getName())
+        if (isPlayerInventory(clickedInventory)
                 && event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY
-                && event.getSlotType().equals(SlotType.CONTAINER)
                 && isArmorItem(event.getCurrentItem())) {
             event.setCancelled(true);
         }
     }
 
+    private boolean isPlayerInventory(Inventory inventory) {
+        return inventory.getType()
+                        .equals(InventoryType.PLAYER);
+    }
+
     private boolean isArmorItem(ItemStack item) {
-        return Objects.nonNull(item) && item.getType()
-                                            .name()
-                                            .endsWith("_HELMET")
+        return Objects.nonNull(item)
+                && item.getType()
+                       .name()
+                       .endsWith("_HELMET")
                 || item.getType()
                        .name()
                        .endsWith("_CHESTPLATE")
