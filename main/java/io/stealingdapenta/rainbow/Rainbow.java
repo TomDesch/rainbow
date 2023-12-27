@@ -5,6 +5,7 @@ import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
 
 import io.stealingdapenta.ArmorListener;
 import io.stealingdapenta.RainbowCommand;
+import io.stealingdapenta.RainbowReloadCommand;
 import java.util.Objects;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -19,11 +20,14 @@ public class Rainbow extends JavaPlugin {
     private final FileConfiguration config = getConfig();
     private final ArmorListener armorListener = new ArmorListener();
     private final RainbowCommand rainbowCommand = new RainbowCommand();
+    private final RainbowReloadCommand reloadCommand = new RainbowReloadCommand();
     private static final String PLAYER_NOT_FOUND = "Player %s not found but should exist!";
     private static final String PLUGIN_ENABLED = "Rainbow armor plugin enabled.";
     private static final String PLUGIN_DISABLED = "Rainbow armor plugin disabled.";
     private static final String RAINBOW_COMMAND = "rainbow";
     public static final String CYCLE_SPEED = "cycleSpeed";
+
+    private static final String RELOAD_COMMAND = "rainbowreload";
 
 
     public void onEnable() {
@@ -36,6 +40,8 @@ public class Rainbow extends JavaPlugin {
                    .registerEvents(armorListener, instance);
         Objects.requireNonNull(getCommand(RAINBOW_COMMAND))
                .setExecutor(rainbowCommand);
+        Objects.requireNonNull(getCommand(RELOAD_COMMAND))
+               .setExecutor(reloadCommand);
 
         logger.info(PLUGIN_ENABLED);
     }

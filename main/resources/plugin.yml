@@ -10,8 +10,14 @@ commands:
     usage: /<command>
     description: Equip / unequip rainbow armor
     default: op
+  rainbowreload:
+    description: Reload the configuration file without having to reboot the server.
+    usage: /<command>
 
 permissions:
   rainbow.use:
     description: Allow usage of /rainbow
+    default: op
+  rainbow.reload:
+    description: Allow usage of /rainbowreload
     default: op
