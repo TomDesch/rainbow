@@ -4,6 +4,8 @@ import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
 
 import io.stealingdapenta.rainbow.Rainbow;
+import java.util.Arrays;
+import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.Command;
@@ -37,18 +39,14 @@ public class RainbowCommand implements CommandExecutor {
             player.sendMessage(Component.text(ARMOR_DISABLED)
                                         .color(TextColor.color(249, 255, 68)));
             return true;
-        } else {
-
         }
 
-        for (int i = 36; i <= 39; i++) {
-            if (playerInventory.getItem(i) != null) {
-                player.sendMessage(Component.text(NO_EMPTY_SPACES)
-                                            .color(TextColor.color(255, 0, 0)));
-
-                return true;
-            }
+        if (Arrays.stream(playerInventory.getArmorContents()).anyMatch(Objects::nonNull)) {
+            player.sendMessage(Component.text(NO_EMPTY_SPACES)
+                                        .color(TextColor.color(255, 0, 0)));
+            return true;
         }
+
         playersWearingRainbowArmor.add(player.getName());
         player.sendMessage(Component.text(ARMOR_ENABLED)
                                     .color(TextColor.color(249, 255, 68)));
