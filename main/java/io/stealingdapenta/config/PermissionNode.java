@@ -1,7 +1,8 @@
 package io.stealingdapenta.config;
 
 public enum PermissionNode {
-    RAINBOW_RELOAD("rainbow.reload");
+    RAINBOW_RELOAD("rainbow.reload"),
+    RAINBOW_USE("rainbow.use");
 
     private final String node;
 

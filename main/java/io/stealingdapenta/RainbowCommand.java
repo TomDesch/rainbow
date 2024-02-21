@@ -2,6 +2,11 @@ package io.stealingdapenta;
 
 import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
+import static io.stealingdapenta.config.ConfigKey.ARMOR_DISABLED_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.ARMOR_ENABLED_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.NO_EMPTY_SPACES_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
+import static io.stealingdapenta.config.PermissionNode.RAINBOW_USE;
 
 import io.stealingdapenta.rainbow.Rainbow;
 import java.util.Arrays;
@@ -16,19 +21,13 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class RainbowCommand implements CommandExecutor {
 
-    private static final String NO_PERMISSION = "You don't have permission to use this command.";
-    private static final String PERMISSION_NODE = "rainbow.use";
-    private static final String ARMOR_ENABLED = "Rainbow armor enabled.";
-    private static final String ARMOR_DISABLED = "Rainbow armor disabled.";
-    private static final String NO_EMPTY_SPACES = "You must have empty armor slots in order to use rainbow armor.";
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Player player = (Player) sender;
         PlayerInventory playerInventory = player.getInventory();
 
-        if (!player.hasPermission(PERMISSION_NODE)) {
-            player.sendMessage(Component.text(NO_PERMISSION)
+        if (!player.hasPermission(RAINBOW_USE.getNode())) {
+            player.sendMessage(Component.text(NO_PERMISSION_MESSAGE.getStringValue())
                                         .color(TextColor.color(255, 0, 0)));
             return true;
         }
@@ -36,13 +35,13 @@ public class RainbowCommand implements CommandExecutor {
         if (playersWearingRainbowArmor.contains(player.getName())) {
             playersWearingRainbowArmor.remove(player.getName());
             playerInventory.setArmorContents(AIR_ARMOR);
-            player.sendMessage(Component.text(ARMOR_DISABLED)
+            player.sendMessage(Component.text(ARMOR_DISABLED_MESSAGE.getStringValue())
                                         .color(TextColor.color(249, 255, 68)));
             return true;
         }
 
         if (hasOccupiedArmorSlot(playerInventory)) {
-            player.sendMessage(Component.text(NO_EMPTY_SPACES)
+            player.sendMessage(Component.text(NO_EMPTY_SPACES_MESSAGE.getStringValue())
                                         .color(TextColor.color(255, 0, 0)));
             return true;
         }
@@ -59,10 +58,10 @@ public class RainbowCommand implements CommandExecutor {
                 return false;
             }
         } else {
-            armor =  new Armor(player);
+            armor = new Armor(player);
         }
         armor.runTaskTimer(Rainbow.getInstance(), 0L, 1L);
-        player.sendMessage(Component.text(ARMOR_ENABLED)
+        player.sendMessage(Component.text(ARMOR_ENABLED_MESSAGE.getStringValue())
                                     .color(TextColor.color(75, 255, 75)));
         return true;
     }

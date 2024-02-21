@@ -1,5 +1,7 @@
 package io.stealingdapenta;
 
+import static io.stealingdapenta.config.ConfigKey.ARMOR_REMOVED_MESSAGE;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -22,7 +24,6 @@ import org.bukkit.inventory.PlayerInventory;
 public class ArmorListener implements Listener {
 
     public static final ArrayList<String> playersWearingRainbowArmor = new ArrayList<>();
-    private static final String ARMOR_REMOVED = "Your rainbow armor was removed!";
 
     public static final ItemStack AIR_ITEM = new ItemStack(Material.AIR);
     public static final ItemStack[] AIR_ARMOR = {AIR_ITEM, AIR_ITEM, AIR_ITEM, AIR_ITEM};
@@ -42,7 +43,7 @@ public class ArmorListener implements Listener {
         Player player = event.getEntity();
 
         if (playersWearingRainbowArmor.remove(player.getName())) {
-            player.sendMessage(Component.text(ARMOR_REMOVED));
+            player.sendMessage(Component.text(ARMOR_REMOVED_MESSAGE.getStringValue()));
 
             PlayerInventory playerInventory = player.getInventory();
             event.getDrops()

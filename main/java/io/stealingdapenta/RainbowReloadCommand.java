@@ -1,5 +1,9 @@
 package io.stealingdapenta;
 
+import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.PLUGIN_RELOADED_MESSAGE;
+import static io.stealingdapenta.config.PermissionNode.RAINBOW_RELOAD;
+
 import io.stealingdapenta.rainbow.Rainbow;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -10,23 +14,19 @@ import org.bukkit.entity.Player;
 
 public class RainbowReloadCommand implements CommandExecutor {
 
-    private static final String NO_PERMISSION = "You don't have permission to use this command.";
-    private static final String PERMISSION_NODE = "rainbow.reload";
-    private static final String PLUGIN_RELOADED = "Rainbow armor plugin reloaded.";
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Player player = (Player) sender;
 
-        if (!player.hasPermission(PERMISSION_NODE)) {
-            player.sendMessage(Component.text(NO_PERMISSION)
+        if (!player.hasPermission(RAINBOW_RELOAD.getNode())) {
+            player.sendMessage(Component.text(NO_PERMISSION_MESSAGE.getStringValue())
                                         .color(TextColor.color(255, 0, 0)));
             return true;
         }
 
         Rainbow.getInstance()
                .reloadConfig();
-        player.sendMessage(Component.text(PLUGIN_RELOADED)
+        player.sendMessage(Component.text(PLUGIN_RELOADED_MESSAGE.getStringValue())
                                     .color(TextColor.color(75, 255, 75)));
         return true;
     }
