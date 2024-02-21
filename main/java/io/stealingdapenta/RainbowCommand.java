@@ -2,6 +2,9 @@ package io.stealingdapenta;
 
 import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
+import static io.stealingdapenta.config.ConfigKey.ARMOR_DISABLED_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.ARMOR_ENABLED_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.NO_EMPTY_SPACES_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
 import static io.stealingdapenta.config.PermissionNode.RAINBOW_USE;
 
@@ -32,13 +35,13 @@ public class RainbowCommand implements CommandExecutor {
         if (playersWearingRainbowArmor.contains(player.getName())) {
             playersWearingRainbowArmor.remove(player.getName());
             playerInventory.setArmorContents(AIR_ARMOR);
-            player.sendMessage(Component.text(NO_PERMISSION_MESSAGE.getValue().toString())
+            player.sendMessage(Component.text(ARMOR_DISABLED_MESSAGE.getValue().toString())
                                         .color(TextColor.color(249, 255, 68)));
             return true;
         }
 
         if (hasOccupiedArmorSlot(playerInventory)) {
-            player.sendMessage(Component.text(NO_PERMISSION_MESSAGE.getValue().toString())
+            player.sendMessage(Component.text(NO_EMPTY_SPACES_MESSAGE.getValue().toString())
                                         .color(TextColor.color(255, 0, 0)));
             return true;
         }
@@ -58,7 +61,7 @@ public class RainbowCommand implements CommandExecutor {
             armor = new Armor(player);
         }
         armor.runTaskTimer(Rainbow.getInstance(), 0L, 1L);
-        player.sendMessage(Component.text(NO_PERMISSION_MESSAGE.getValue().toString())
+        player.sendMessage(Component.text(ARMOR_ENABLED_MESSAGE.getValue().toString())
                                     .color(TextColor.color(75, 255, 75)));
         return true;
     }
