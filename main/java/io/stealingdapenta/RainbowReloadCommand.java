@@ -19,14 +19,14 @@ public class RainbowReloadCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission(RAINBOW_RELOAD.getNode())) {
-            player.sendMessage(Component.text(NO_PERMISSION_MESSAGE.getStringValue())
+            player.sendMessage(Component.text(NO_PERMISSION_MESSAGE.getValue().toString())
                                         .color(TextColor.color(255, 0, 0)));
             return true;
         }
 
         Rainbow.getInstance()
                .reloadConfig();
-        player.sendMessage(Component.text(PLUGIN_RELOADED_MESSAGE.getStringValue())
+        player.sendMessage(Component.text(PLUGIN_RELOADED_MESSAGE.getValue().toString())
                                     .color(TextColor.color(75, 255, 75)));
         return true;
     }

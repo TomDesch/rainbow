@@ -3,7 +3,7 @@ package io.stealingdapenta.config;
 import io.stealingdapenta.rainbow.Rainbow;
 
 public enum ConfigKey {
-    CYCLE_SPEED("cycle-speed", "5"),
+    CYCLE_SPEED("cycle-speed", 5),
     PLUGIN_RELOADED_MESSAGE("plugin-reloaded-message", "Rainbow armor plugin reloaded."),
     NO_PERMISSION_MESSAGE("no-permission-message", "You don't have permission to use this command."),
     ARMOR_ENABLED_MESSAGE("armor-enabled-message", "Rainbow armor enabled."),
@@ -13,9 +13,9 @@ public enum ConfigKey {
 
 
     private final String key;
-    private final String defaultValue;
+    private final Object defaultValue;
 
-    ConfigKey(String key, String defaultValue) {
+    ConfigKey(String key, Object defaultValue) {
         this.key = key;
         this.defaultValue = defaultValue;
     }
@@ -25,17 +25,26 @@ public enum ConfigKey {
         return key;
     }
 
-    public String getDefaultValue() {
+    public Object getDefaultValue() {
         return defaultValue;
     }
 
-    public String getStringValue() {
+    public Object getValue() {
+        if (defaultValue instanceof String) {
+            return getStringValue();
+        } else if (defaultValue instanceof Integer) {
+            return getIntValue();
+        }
+        return 0;
+    }
+
+    private String getStringValue() {
         return Rainbow.getInstance()
                       .getConfig()
                       .getString(this.getKey());
     }
 
-    public int getIntValue() {
+    private int getIntValue() {
         return Rainbow.getInstance()
                       .getConfig()
                       .getInt(this.getKey());

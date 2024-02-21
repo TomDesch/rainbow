@@ -22,7 +22,7 @@ public class Armor extends BukkitRunnable {
 
 
     public Armor(Player player) {
-        this.cycleSpeed = CYCLE_SPEED.getIntValue();
+        this.cycleSpeed = (int) CYCLE_SPEED.getValue();
         this.player = player;
     }
 

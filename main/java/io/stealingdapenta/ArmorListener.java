@@ -43,7 +43,7 @@ public class ArmorListener implements Listener {
         Player player = event.getEntity();
 
         if (playersWearingRainbowArmor.remove(player.getName())) {
-            player.sendMessage(Component.text(ARMOR_REMOVED_MESSAGE.getStringValue()));
+            player.sendMessage(Component.text(ARMOR_REMOVED_MESSAGE.getValue().toString()));
 
             PlayerInventory playerInventory = player.getInventory();
             event.getDrops()
