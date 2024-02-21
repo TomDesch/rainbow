@@ -1,7 +1,7 @@
 package io.stealingdapenta.config;
 
 public enum ConfigKey {
-    CYCLE_SPEED("cycle-speed", "defaultValue"),
+    CYCLE_SPEED("cycle-speed", "5"),
     PLUGIN_RELOADED_MESSAGE("plugin-reloaded-message", "Rainbow armor plugin reloaded."),
     NO_PERMISSION_MESSAGE("no-permission-message", "You don't have permission to use this command.");
 

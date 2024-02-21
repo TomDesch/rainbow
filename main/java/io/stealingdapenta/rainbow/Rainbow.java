@@ -2,11 +2,12 @@ package io.stealingdapenta.rainbow;
 
 import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
-import static io.stealingdapenta.config.ConfigKey.CYCLE_SPEED;
 
 import io.stealingdapenta.ArmorListener;
 import io.stealingdapenta.RainbowCommand;
 import io.stealingdapenta.RainbowReloadCommand;
+import io.stealingdapenta.config.ConfigKey;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -46,10 +47,18 @@ public class Rainbow extends JavaPlugin {
     }
 
     private void initializeConfiguration() {
-        config.addDefault(CYCLE_SPEED.getKey(), 5);
+        initializeDefaultValues();
         config.options()
               .copyDefaults(true);
         saveConfig();
+    }
+
+    private void initializeDefaultValues() {
+        Arrays.stream(ConfigKey.values()).forEach(this::addDefaultValue);
+    }
+
+    private void addDefaultValue(ConfigKey configKey) {
+        config.addDefault(configKey.getKey(), configKey.getDefaultValue());
     }
 
     public void onDisable() {
