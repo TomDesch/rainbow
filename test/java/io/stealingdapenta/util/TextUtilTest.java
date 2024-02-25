@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.regex.Matcher;
@@ -17,71 +18,6 @@ import net.kyori.adventure.text.format.TextDecoration.State;
 import org.junit.jupiter.api.Test;
 
 class TextUtilTest {
-
-    @Test
-    void applyFormatCode_Bold_ReturnsCorrectStyle() {
-        String validCode = "b";
-
-        Style result = TextUtil.applyFormatCode(validCode);
-
-        assertNotNull(result);
-        assertTrue(result.hasDecoration(TextDecoration.BOLD));
-        assertEquals(State.TRUE, result.decoration(TextDecoration.BOLD));
-    }
-
-    @Test
-    void applyFormatCode_Strikethrough_ReturnsCorrectStyle() {
-        String validCode = "s";
-
-        Style result = TextUtil.applyFormatCode(validCode);
-
-        assertNotNull(result);
-        assertTrue(result.hasDecoration(TextDecoration.STRIKETHROUGH));
-        assertEquals(State.TRUE, result.decoration(TextDecoration.STRIKETHROUGH));
-    }
-
-    @Test
-    void applyFormatCode_Underlined_ReturnsCorrectStyle() {
-        String validCode = "u";
-
-        Style result = TextUtil.applyFormatCode(validCode);
-
-        assertNotNull(result);
-        assertTrue(result.hasDecoration(TextDecoration.UNDERLINED));
-        assertEquals(State.TRUE, result.decoration(TextDecoration.UNDERLINED));
-    }
-
-    @Test
-    void applyFormatCode_Italic_ReturnsCorrectStyle() {
-        String validCode = "i";
-
-        Style result = TextUtil.applyFormatCode(validCode);
-
-        assertNotNull(result);
-        assertTrue(result.hasDecoration(TextDecoration.ITALIC));
-        assertEquals(State.TRUE, result.decoration(TextDecoration.ITALIC));
-    }
-
-    @Test
-    void applyFormatCode_Obfuscated_ReturnsCorrectStyle() {
-        String validCode = "o";
-
-        Style result = TextUtil.applyFormatCode(validCode);
-
-        assertNotNull(result);
-        assertTrue(result.hasDecoration(TextDecoration.OBFUSCATED));
-        assertEquals(State.TRUE, result.decoration(TextDecoration.OBFUSCATED));
-    }
-
-    @Test
-    void applyFormatCode_InvalidCode_ReturnsEmptyStyle() {
-        String invalidCode = "xyz";
-
-        Style result = TextUtil.applyFormatCode(invalidCode);
-
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-    }
 
     @Test
     void createStyle_ValidDecoration_ReturnsCorrectStyle() {
@@ -117,6 +53,53 @@ class TextUtilTest {
         assertNull(matcher.group(1));
         assertNull(matcher.group(2));
         assertNull(matcher.group(3));
+    }
+
+
+    @Test
+    void parseRGB_Valid_Success() {
+        String input = "&(100, 150, 200)";
+        TextColor result = TextUtil.parseRGB(input);
+        assertNotNull(result);
+        assertEquals(100, result.red());
+        assertEquals(150, result.green());
+        assertEquals(200, result.blue());
+    }
+
+    @Test
+    void parseRGB_LeadingSpaces_Success() {
+        String input = "  &(50, 100, 150)";
+        TextColor result = TextUtil.parseRGB(input);
+        assertNotNull(result);
+        assertEquals(50, result.red());
+        assertEquals(100, result.green());
+        assertEquals(150, result.blue());
+    }
+
+    @Test
+    void parseRGB_TrailingSpaces_Success() {
+        String input = "&(25, 75, 125)  ";
+        TextColor result = TextUtil.parseRGB(input);
+        assertNotNull(result);
+        assertEquals(25, result.red());
+        assertEquals(75, result.green());
+        assertEquals(125, result.blue());
+    }
+
+    @Test
+    void parseRGB_Invalid_IllegalArgumentException() {
+        String input = "&(aaa, 555, 777)";
+        assertThrows(IllegalArgumentException.class, () -> TextUtil.parseRGB(input));
+    }
+
+    @Test
+    void parseRGB_TooHighValues_Success() {
+        String input = "&(256, 512, 768)";
+        TextColor result = TextUtil.parseRGB(input);
+        assertNotNull(result);
+        assertEquals(0, result.red());
+        assertEquals(0, result.green());
+        assertEquals(0, result.blue());
     }
 
     @Test
@@ -164,6 +147,18 @@ class TextUtilTest {
 
         TextComponent result = TextUtil.parseFormattedString(input);
         TextComponent expected = Component.text("Formatted Text", color, TextDecoration.BOLD);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void parseFormattedString_ColorAndDecorationCodesNotAsFirstPattern_Formatted() {
+        String input = "Some unformatted and some &(0,0,0)&bFormatted Text";
+        TextColor color = TextColor.color(0, 0, 0);
+
+        TextComponent result = TextUtil.parseFormattedString(input);
+        TextComponent expected = Component.text("Some unformatted and some ")
+                                          .append(Component.text("Formatted Text", color, TextDecoration.BOLD));
 
         assertEquals(expected, result);
     }
