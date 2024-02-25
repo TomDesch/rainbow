@@ -8,7 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import org.junit.jupiter.api.Test;
@@ -124,25 +127,54 @@ class TextUtilTest {
         assertFalse(matcher.matches());
     }
 
-//    @Test
-//    void deserializeToFormattedText_MultipleFormatCodes_ReturnsCorrectTextComponent() {
-//        TextColor color1 = TextColor.color(187, 0, 62);
-//        TextColor color2 = TextColor.color(201, 255, 141);
-//        TextColor color3 = TextColor.color(255, 29, 221);
-//        String input = "&(187,0,62)color1 &(201, 255, 141)&scolor2 strikethrough &(255, 29, 221)&bcolor3 in bold!!";
-//
-//        TextComponent expected = Component.text()
-//                                          .append(Component.text("color1 ", color1))
-//                                          .append(Component.text("color2 strikethrough ", color2, TextDecoration.STRIKETHROUGH))
-//                                          .append(Component.text("color3 in bold!!", color3, TextDecoration.BOLD))
-//                                          .build();
-//
-//        TextComponent result = TextUtil.deserializeToFormattedText(input);
-//
-//        System.out.println(expected);
-//        System.out.println(result);
-//
-//        assertNotNull(result);
-//        assertEquals(expected, result);
-//    }
+    @Test
+    void parseFormattedString_NoFormat_PlainText() {
+        String input = "Hello, World!";
+
+        TextComponent result = TextUtil.parseFormattedString(input);
+
+        TextComponent expected = Component.text(input);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void parseFormattedString_ColorCodes_Formatted() {
+        String input = "&(255,0,0)Red Text";
+        TextColor color = TextColor.color(255, 0, 0);
+
+        TextComponent result = TextUtil.parseFormattedString(input);
+
+        TextComponent expected = Component.text("Red Text", color);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void parseFormattedString_DecorationCodes_Formatted() {
+        String input = "&bBold Text";
+        TextComponent result = TextUtil.parseFormattedString(input);
+
+        TextComponent expected = Component.text("Bold Text", Style.style(TextDecoration.BOLD));
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void parseFormattedString_ColorAndDecorationCodes_Formatted() {
+        String input = "&(0,0,0)&bFormatted Text";
+        TextColor color = TextColor.color(0, 0, 0);
+
+        TextComponent result = TextUtil.parseFormattedString(input);
+        TextComponent expected = Component.text("Formatted Text", color, TextDecoration.BOLD);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void parseFormattedString_InvalidFormatCodes_PlainText() {
+        String input = "&InvalidCode&Text";
+
+        TextComponent result = TextUtil.parseFormattedString(input);
+
+        TextComponent expected = Component.text(input);
+        assertEquals(expected, result);
+    }
 }
