@@ -19,11 +19,13 @@ import org.junit.jupiter.api.Test;
 
 class TextUtilTest {
 
+    private final TextUtil textUtil = TextUtil.getInstance();
+
     @Test
     void createStyle_ValidDecoration_ReturnsCorrectStyle() {
         TextDecoration validDecoration = TextDecoration.STRIKETHROUGH;
 
-        Style result = TextUtil.createStyle(validDecoration);
+        Style result = textUtil.createStyle(validDecoration);
 
         assertNotNull(result);
         assertTrue(result.hasDecoration(validDecoration));
@@ -59,7 +61,7 @@ class TextUtilTest {
     @Test
     void parseRGB_Valid_Success() {
         String input = "&(100, 150, 200)";
-        TextColor result = TextUtil.parseRGB(input);
+        TextColor result = textUtil.parseRGB(input);
         assertNotNull(result);
         assertEquals(100, result.red());
         assertEquals(150, result.green());
@@ -69,7 +71,7 @@ class TextUtilTest {
     @Test
     void parseRGB_LeadingSpaces_Success() {
         String input = "  &(50, 100, 150)";
-        TextColor result = TextUtil.parseRGB(input);
+        TextColor result = textUtil.parseRGB(input);
         assertNotNull(result);
         assertEquals(50, result.red());
         assertEquals(100, result.green());
@@ -79,7 +81,7 @@ class TextUtilTest {
     @Test
     void parseRGB_TrailingSpaces_Success() {
         String input = "&(25, 75, 125)  ";
-        TextColor result = TextUtil.parseRGB(input);
+        TextColor result = textUtil.parseRGB(input);
         assertNotNull(result);
         assertEquals(25, result.red());
         assertEquals(75, result.green());
@@ -89,13 +91,13 @@ class TextUtilTest {
     @Test
     void parseRGB_Invalid_IllegalArgumentException() {
         String input = "&(aaa, 555, 777)";
-        assertThrows(IllegalArgumentException.class, () -> TextUtil.parseRGB(input));
+        assertThrows(IllegalArgumentException.class, () -> textUtil.parseRGB(input));
     }
 
     @Test
     void parseRGB_TooHighValues_Success() {
         String input = "&(256, 512, 768)";
-        TextColor result = TextUtil.parseRGB(input);
+        TextColor result = textUtil.parseRGB(input);
         assertNotNull(result);
         assertEquals(0, result.red());
         assertEquals(0, result.green());
@@ -114,7 +116,7 @@ class TextUtilTest {
     void parseFormattedString_NoFormat_PlainText() {
         String input = "Hello, World!";
 
-        TextComponent result = TextUtil.parseFormattedString(input);
+        TextComponent result = textUtil.parseFormattedString(input);
 
         TextComponent expected = Component.text(input);
         assertEquals(expected, result);
@@ -125,7 +127,7 @@ class TextUtilTest {
         String input = "&(255,0,0)Red Text";
         TextColor color = TextColor.color(255, 0, 0);
 
-        TextComponent result = TextUtil.parseFormattedString(input);
+        TextComponent result = textUtil.parseFormattedString(input);
 
         TextComponent expected = Component.text("Red Text", color);
         assertEquals(expected, result);
@@ -134,7 +136,7 @@ class TextUtilTest {
     @Test
     void parseFormattedString_DecorationCodes_Formatted() {
         String input = "&bBold Text";
-        TextComponent result = TextUtil.parseFormattedString(input);
+        TextComponent result = textUtil.parseFormattedString(input);
 
         TextComponent expected = Component.text("Bold Text", Style.style(TextDecoration.BOLD));
         assertEquals(expected, result);
@@ -145,7 +147,7 @@ class TextUtilTest {
         String input = "&(0,0,0)&bFormatted Text";
         TextColor color = TextColor.color(0, 0, 0);
 
-        TextComponent result = TextUtil.parseFormattedString(input);
+        TextComponent result = textUtil.parseFormattedString(input);
         TextComponent expected = Component.text("Formatted Text", color, TextDecoration.BOLD);
 
         assertEquals(expected, result);
@@ -156,7 +158,7 @@ class TextUtilTest {
         String input = "Some unformatted and some &(0,0,0)&bFormatted Text";
         TextColor color = TextColor.color(0, 0, 0);
 
-        TextComponent result = TextUtil.parseFormattedString(input);
+        TextComponent result = textUtil.parseFormattedString(input);
         TextComponent expected = Component.text("Some unformatted and some ")
                                           .append(Component.text("Formatted Text", color, TextDecoration.BOLD));
 
@@ -167,7 +169,7 @@ class TextUtilTest {
     void parseFormattedString_InvalidFormatCodes_PlainText() {
         String input = "&InvalidCode&Text";
 
-        TextComponent result = TextUtil.parseFormattedString(input);
+        TextComponent result = textUtil.parseFormattedString(input);
 
         TextComponent expected = Component.text(input);
         assertEquals(expected, result);

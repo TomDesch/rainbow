@@ -15,6 +15,16 @@ import net.kyori.adventure.text.format.TextDecoration.State;
 
 public class TextUtil {
 
+    private static TextUtil instance;
+
+    public static TextUtil getInstance() {
+        if (Objects.isNull(instance)) {
+            instance = new TextUtil();
+        }
+
+        return instance;
+    }
+
     /**
      * All possible formatting options, exhausted list: b s u i o matching bold strikethrough underline italic obfuscated
      */
@@ -33,14 +43,14 @@ public class TextUtil {
      */
     private static final Pattern TEXT_PATTERN = Pattern.compile(RGB_PATTERN + "|" + DECORATOR_PATTERN);
 
-    static Style createStyle(TextDecoration decoration) {
+    Style createStyle(TextDecoration decoration) {
         return Style.style()
                     .decoration(decoration, State.TRUE)
                     .build();
     }
 
 
-    public static TextComponent parseFormattedString(String input) {
+    public TextComponent parseFormattedString(String input) {
         String[] segments = TEXT_PATTERN.splitWithDelimiters(input, 0);
 
         if (segments.length <= 1) {
@@ -69,8 +79,6 @@ public class TextUtil {
                     textSegment.content(currentElement);
                     formattedSegments.add(textSegment.build());
                     textSegment = null;
-                } else {
-                    throw new RuntimeException("This isn't possible.");
                 }
             }
 
@@ -80,7 +88,7 @@ public class TextUtil {
         return combineTextComponents(formattedSegments);
     }
 
-    private static TextComponent combineTextComponents(List<TextComponent> textComponents) {
+    private TextComponent combineTextComponents(List<TextComponent> textComponents) {
         if (textComponents.isEmpty()) {
             throw new IllegalArgumentException("Input list of TextComponents is empty");
         }
@@ -95,18 +103,18 @@ public class TextUtil {
         return combinedComponent;
     }
 
-    private static boolean isRgbPattern(String element) {
+    private boolean isRgbPattern(String element) {
         return RGB_PATTERN.matcher(element)
                           .matches();
     }
 
-    private static boolean isDecoratorPattern(String element) {
+    private boolean isDecoratorPattern(String element) {
         return DECORATOR_PATTERN.matcher(element)
                                 .matches();
     }
 
 
-    static TextColor parseRGB(String input) {
+    TextColor parseRGB(String input) {
         Matcher matcher = RGB_PATTERN.matcher(input.replace(" ", ""));
 
         if (!matcher.matches()) {
@@ -124,7 +132,7 @@ public class TextUtil {
         return TextColor.color(toValidRGB(red), toValidRGB(green), toValidRGB(blue));
     }
 
-    private static int parseRGBComponent(String component) {
+    private int parseRGBComponent(String component) {
         try {
             return Integer.parseInt(component);
         } catch (NumberFormatException e) {
@@ -132,7 +140,7 @@ public class TextUtil {
         }
     }
 
-    private static int toValidRGB(int value) {
+    private int toValidRGB(int value) {
         return value % 256;
     }
 }
