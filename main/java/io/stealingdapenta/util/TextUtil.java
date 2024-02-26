@@ -51,7 +51,7 @@ public class TextUtil {
 
 
     public TextComponent parseFormattedString(String input) {
-        String[] segments = TEXT_PATTERN.splitWithDelimiters(input, 0);
+        String[] segments = splitByPatternWithDelimiters(input);
 
         if (segments.length <= 1) {
             return Component.text(segments[0]);
@@ -86,6 +86,52 @@ public class TextUtil {
         }
 
         return combineTextComponents(formattedSegments);
+    }
+
+
+    /**
+     * This method is stolen from Java 21 library
+     * & adapted to only suit my needs.
+     * When upgrading back to J21, then this method should be replaced with the native one.
+     */
+    private String[] splitByPatternWithDelimiters(CharSequence input) {
+        int index = 0;
+        ArrayList<String> matchList = new ArrayList<>();
+        Matcher m = TEXT_PATTERN.matcher(input);
+
+        // Add segments before each match found
+        while(m.find()) {
+            {
+                if (index == 0 && index == m.start() && 0 == m.end()) {
+                    // no empty leading substring included for zero-width match
+                    // at the beginning of the input char sequence.
+                    continue;
+                }
+                String match = input.subSequence(index, m.start()).toString();
+                matchList.add(match);
+                index = m.end();
+
+
+                matchList.add(input.subSequence(m.start(), index).toString()); // Add the delimiter
+
+            }
+        }
+
+        // If no match was found, return this
+        if (index == 0)
+            return new String[] {input.toString()};
+
+        // Add remaining segment
+        matchList.add(input.subSequence(index, input.length()).toString());
+
+        // Construct result
+        int resultSize = matchList.size();
+        while (resultSize > 0 && matchList.get(resultSize - 1)
+                                          .isEmpty()) {
+            resultSize--;
+        }
+        String[] result = new String[resultSize];
+        return matchList.subList(0, resultSize).toArray(result);
     }
 
     private TextComponent combineTextComponents(List<TextComponent> textComponents) {
