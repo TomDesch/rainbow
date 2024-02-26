@@ -11,8 +11,6 @@ import static io.stealingdapenta.config.PermissionNode.RAINBOW_USE;
 import io.stealingdapenta.rainbow.Rainbow;
 import java.util.Arrays;
 import java.util.Objects;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,22 +25,19 @@ public class RainbowCommand implements CommandExecutor {
         PlayerInventory playerInventory = player.getInventory();
 
         if (!player.hasPermission(RAINBOW_USE.getNode())) {
-            player.sendMessage(Component.text(NO_PERMISSION_MESSAGE.getValue().toString())
-                                        .color(TextColor.color(255, 0, 0)));
+            player.sendMessage(NO_PERMISSION_MESSAGE.getFormattedMessage());
             return true;
         }
 
         if (playersWearingRainbowArmor.contains(player.getName())) {
             playersWearingRainbowArmor.remove(player.getName());
             playerInventory.setArmorContents(AIR_ARMOR);
-            player.sendMessage(Component.text(ARMOR_DISABLED_MESSAGE.getValue().toString())
-                                        .color(TextColor.color(249, 255, 68)));
+            player.sendMessage(ARMOR_DISABLED_MESSAGE.getFormattedMessage());
             return true;
         }
 
         if (hasOccupiedArmorSlot(playerInventory)) {
-            player.sendMessage(Component.text(NO_EMPTY_SPACES_MESSAGE.getValue().toString())
-                                        .color(TextColor.color(255, 0, 0)));
+            player.sendMessage(NO_EMPTY_SPACES_MESSAGE.getFormattedMessage());
             return true;
         }
 
@@ -61,8 +56,7 @@ public class RainbowCommand implements CommandExecutor {
             armor = new Armor(player);
         }
         armor.runTaskTimer(Rainbow.getInstance(), 0L, 1L);
-        player.sendMessage(Component.text(ARMOR_ENABLED_MESSAGE.getValue().toString())
-                                    .color(TextColor.color(75, 255, 75)));
+        player.sendMessage(ARMOR_ENABLED_MESSAGE.getFormattedMessage());
         return true;
     }
 

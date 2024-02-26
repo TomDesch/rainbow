@@ -5,7 +5,6 @@ import static io.stealingdapenta.config.ConfigKey.ARMOR_REMOVED_MESSAGE;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,12 +42,12 @@ public class ArmorListener implements Listener {
         Player player = event.getEntity();
 
         if (playersWearingRainbowArmor.remove(player.getName())) {
-            player.sendMessage(Component.text(ARMOR_REMOVED_MESSAGE.getValue().toString()));
+            player.sendMessage(ARMOR_REMOVED_MESSAGE.getFormattedMessage());
 
             PlayerInventory playerInventory = player.getInventory();
             event.getDrops()
                  .removeAll(Arrays.asList(playerInventory.getLeggings(), playerInventory.getBoots(), playerInventory.getChestplate(),
-                         playerInventory.getHelmet()));
+                                          playerInventory.getHelmet()));
         }
     }
 
