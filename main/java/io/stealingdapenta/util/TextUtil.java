@@ -18,9 +18,9 @@ public class TextUtil {
     /**
      * All possible formatting options, exhausted list: b s u i o matching bold strikethrough underline italic obfuscated
      */
-    private static final Map<String, TextDecoration> FORMAT_CODE_STYLES = Map.of("b", TextDecoration.BOLD, "s", TextDecoration.STRIKETHROUGH,
-                                                                                 "u", TextDecoration.UNDERLINED, "i", TextDecoration.ITALIC,
-                                                                                 "o", TextDecoration.OBFUSCATED);
+    private static final Map<String, TextDecoration> FORMAT_CODE_STYLES = Map.of("b", TextDecoration.BOLD, "s", TextDecoration.STRIKETHROUGH, "u",
+                                                                                 TextDecoration.UNDERLINED, "i", TextDecoration.ITALIC, "o",
+                                                                                 TextDecoration.OBFUSCATED);
 
 
     private static final Pattern RGB_PATTERN = Pattern.compile("&(\\(\\d{1,3},\\d{1,3},\\d{1,3}\\))");
@@ -59,12 +59,10 @@ public class TextUtil {
             }
             String currentElement = segments[index];
 
-            if (isSpecialPattern(currentElement)) {
-                if (isRgbPattern(currentElement)) {
-                    textSegment.color(parseRGB(currentElement));
-                } else if (isDecoratorPattern(currentElement)) {
-                    textSegment.decorationIfAbsent(FORMAT_CODE_STYLES.get(currentElement.substring(1)), State.TRUE);
-                }
+            if (isRgbPattern(currentElement)) {
+                textSegment.color(parseRGB(currentElement));
+            } else if (isDecoratorPattern(currentElement)) {
+                textSegment.decorationIfAbsent(FORMAT_CODE_STYLES.get(currentElement.substring(1)), State.TRUE);
             } else if (!currentElement.isBlank()) {
                 if (textSegment.content()
                                .isEmpty()) {
@@ -80,12 +78,6 @@ public class TextUtil {
         }
 
         return combineTextComponents(formattedSegments);
-    }
-
-    private static boolean isSpecialPattern(String element) {
-        return RGB_PATTERN.matcher(element)
-                          .matches() || DECORATOR_PATTERN.matcher(element)
-                                                         .matches();
     }
 
     private static TextComponent combineTextComponents(List<TextComponent> textComponents) {
