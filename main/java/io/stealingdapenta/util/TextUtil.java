@@ -34,7 +34,7 @@ public class TextUtil {
 
 
     private static final Pattern RGB_PATTERN = Pattern.compile("&(\\(\\d{1,3},\\d{1,3},\\d{1,3}\\))");
-    private static final Pattern DECORATOR_PATTERN = Pattern.compile("&([buosi])");
+    private static final Pattern DECORATOR_PATTERN = Pattern.compile("&([buosir])");
 
     /**
      * This regex is designed to match color codes in the format &(r,g,b) or the style codes &b, &u, &o, &s, or &i. The backslashes are used to escape
@@ -72,7 +72,11 @@ public class TextUtil {
             if (isRgbPattern(currentElement)) {
                 textSegment.color(parseRGB(currentElement));
             } else if (isDecoratorPattern(currentElement)) {
-                textSegment.decorationIfAbsent(FORMAT_CODE_STYLES.get(currentElement.substring(1)), State.TRUE);
+                if (currentElement.contains("r")) {
+                    disableAllStyle(textSegment);
+                } else {
+                    textSegment.decorate(FORMAT_CODE_STYLES.get(currentElement.substring(1)));
+                }
             } else if (!currentElement.isBlank()) {
                 if (textSegment.content()
                                .isEmpty()) {
@@ -88,11 +92,18 @@ public class TextUtil {
         return combineTextComponents(formattedSegments);
     }
 
+    private void disableAllStyle(TextComponent.Builder componentBuilder) {
+        for (TextDecoration decoration : TextDecoration.values()) {
+            componentBuilder.decoration(decoration, State.FALSE);
+        }
+
+        componentBuilder.color(TextColor.color(0xFFFFFF));
+    }
+
 
     /**
-     * This method is stolen from Java 21 library
-     * & adapted to only suit my needs.
-     * When upgrading back to J21, then this method should be replaced with the native one.
+     * This method is stolen from Java 21 library & adapted to only suit my needs. When upgrading back to J21, then this method should be replaced with the
+     * native one.
      */
     private String[] splitByPatternWithDelimiters(CharSequence input) {
         int index = 0;
@@ -100,29 +111,32 @@ public class TextUtil {
         Matcher m = TEXT_PATTERN.matcher(input);
 
         // Add segments before each match found
-        while(m.find()) {
+        while (m.find()) {
             {
                 if (index == 0 && index == m.start() && 0 == m.end()) {
                     // no empty leading substring included for zero-width match
                     // at the beginning of the input char sequence.
                     continue;
                 }
-                String match = input.subSequence(index, m.start()).toString();
+                String match = input.subSequence(index, m.start())
+                                    .toString();
                 matchList.add(match);
                 index = m.end();
 
-
-                matchList.add(input.subSequence(m.start(), index).toString()); // Add the delimiter
+                matchList.add(input.subSequence(m.start(), index)
+                                   .toString()); // Add the delimiter
 
             }
         }
 
         // If no match was found, return this
-        if (index == 0)
-            return new String[] {input.toString()};
+        if (index == 0) {
+            return new String[]{input.toString()};
+        }
 
         // Add remaining segment
-        matchList.add(input.subSequence(index, input.length()).toString());
+        matchList.add(input.subSequence(index, input.length())
+                           .toString());
 
         // Construct result
         int resultSize = matchList.size();
@@ -131,12 +145,13 @@ public class TextUtil {
             resultSize--;
         }
         String[] result = new String[resultSize];
-        return matchList.subList(0, resultSize).toArray(result);
+        return matchList.subList(0, resultSize)
+                        .toArray(result);
     }
 
     private TextComponent combineTextComponents(List<TextComponent> textComponents) {
         if (textComponents.isEmpty()) {
-            throw new IllegalArgumentException("Input list of TextComponents is empty");
+            throw new IllegalArgumentException("At least one TextComponent must be provided");
         }
 
         TextComponent combinedComponent = textComponents.get(textComponents.size() - 1);
@@ -148,6 +163,7 @@ public class TextUtil {
 
         return combinedComponent;
     }
+
 
     private boolean isRgbPattern(String element) {
         return RGB_PATTERN.matcher(element)

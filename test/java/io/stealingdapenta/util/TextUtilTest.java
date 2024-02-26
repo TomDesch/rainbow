@@ -32,18 +32,24 @@ class TextUtilTest {
         assertEquals(State.TRUE, result.decoration(validDecoration));
     }
 
-    private static final Pattern TEXT_PATTERN = Pattern.compile("&(?:\\((\\d+),(\\d+),(\\d+)\\)|[buosi])(.*)");
+    private static final Pattern RGB_PATTERN = Pattern.compile("&(\\(\\d{1,3},\\d{1,3},\\d{1,3}\\))");
+    private static final Pattern DECORATOR_PATTERN = Pattern.compile("&([buosir])");
+
+    /**
+     * This regex is designed to match color codes in the format &(r,g,b) or the style codes &b, &u, &o, &s, or &i. The backslashes are used to escape
+     * parentheses, and capturing groups allow extracting the individual color components. Examples: &(12,7,222), &(255,255,255), &b, &u, &o, &s, &i (.*) allows
+     * all the text after.
+     */
+    private static final Pattern TEXT_PATTERN = Pattern.compile(RGB_PATTERN + "*+" + "|" + DECORATOR_PATTERN + "*+");
 
     @Test
     void TEXT_PATTERN_ColorCode_Matches() {
-        String input = "&(127,255,0)thetext";
+        String input = "&(127,255,0)";
         Matcher matcher = TEXT_PATTERN.matcher(input);
 
         assertTrue(matcher.matches());
-        assertEquals("127", matcher.group(1));
-        assertEquals("255", matcher.group(2));
-        assertEquals("0", matcher.group(3));
-        assertEquals("thetext", matcher.group(4));
+        assertEquals("(127,255,0)", matcher.group(1));
+        assertNull(matcher.group(2));
     }
 
     @Test
@@ -53,8 +59,7 @@ class TextUtilTest {
 
         assertTrue(matcher.matches());
         assertNull(matcher.group(1));
-        assertNull(matcher.group(2));
-        assertNull(matcher.group(3));
+        assertEquals("b", matcher.group(2));
     }
 
 
@@ -161,6 +166,19 @@ class TextUtilTest {
         TextComponent result = textUtil.parseFormattedString(input);
         TextComponent expected = Component.text("Some unformatted and some ")
                                           .append(Component.text("Formatted Text", color, TextDecoration.BOLD));
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void parseFormattedString_ColorAndDecorationCodesWithReset_Formatted() {
+        String input = "Some unformatted and some &(0,0,0)&bFormatted Text &rexcept this";
+        TextColor color = TextColor.color(0, 0, 0);
+
+        TextComponent result = textUtil.parseFormattedString(input);
+        TextComponent expected = Component.text("Some unformatted and some ")
+                                          .append(Component.text("Formatted Text ", color, TextDecoration.BOLD)
+                                                           .append(Component.text("except this")));
 
         assertEquals(expected, result);
     }
