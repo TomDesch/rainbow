@@ -71,7 +71,7 @@ public class ArmorListener implements Listener {
             return;
         }
 
-        // Cancel event if the player is wearing rainbow armor and clicks an armor slot
+        // Cancel the event if the player is wearing rainbow armor and clicks an armor slot
         if (event.getSlotType()
                  .equals(SlotType.ARMOR)) {
             event.setCancelled(true);

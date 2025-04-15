@@ -38,7 +38,8 @@ public class TextUtil {
 
     /**
      * This regex is designed to match color codes in the format &(r,g,b) or the style codes &b, &u, &o, &s, or &i. The backslashes are used to escape
-     * parentheses, and capturing groups allow extracting the individual color components. Examples: &(12,7,222), &(255,255,255), &b, &u, &o, &s, &i (.*) allows
+     * parentheses, and capturing groups allows extracting the individual color components.
+     * Examples: &(12,7,222), &(255,255,255), &b, &u, &o, &s, &i (.*) allows
      * all the text after.
      */
     private static final Pattern TEXT_PATTERN = Pattern.compile(RGB_PATTERN + "|" + DECORATOR_PATTERN);
@@ -102,7 +103,8 @@ public class TextUtil {
 
 
     /**
-     * This method is stolen from Java 21 library & adapted to only suit my needs. When upgrading back to J21, then this method should be replaced with the
+     * This method is stolen from Java 21 library and adapted to only suit my needs.
+     * When upgrading back to J21, then this method should be replaced with the
      * native one.
      */
     private String[] splitByPatternWithDelimiters(CharSequence input) {
@@ -134,7 +136,7 @@ public class TextUtil {
             return new String[]{input.toString()};
         }
 
-        // Add remaining segment
+        // Add a remaining segment
         matchList.add(input.subSequence(index, input.length())
                            .toString());
 
@@ -154,7 +156,7 @@ public class TextUtil {
             throw new IllegalArgumentException("At least one TextComponent must be provided");
         }
 
-        TextComponent combinedComponent = textComponents.get(textComponents.size() - 1);
+        TextComponent combinedComponent = textComponents.getLast();
 
         for (int i = textComponents.size() - 2; i >= 0; i--) {
             combinedComponent = textComponents.get(i)
