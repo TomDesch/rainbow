@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -178,7 +179,7 @@ class TextUtilTest {
         TextComponent result = textUtil.parseFormattedString(input);
         TextComponent expected = Component.text("Some unformatted and some ")
                                           .append(Component.text("Formatted Text ", color, TextDecoration.BOLD)
-                                                           .append(Component.text("except this")));
+                                                           .append(Component.text("except this", resetStyle())));
 
         assertEquals(expected, result);
     }
@@ -191,5 +192,16 @@ class TextUtilTest {
 
         TextComponent expected = Component.text(input);
         assertEquals(expected, result);
+    }
+
+    private Style resetStyle() {
+        return Style.style()
+                    .color(NamedTextColor.WHITE)
+                    .decoration(TextDecoration.BOLD, false)
+                    .decoration(TextDecoration.STRIKETHROUGH, false)
+                    .decoration(TextDecoration.UNDERLINED, false)
+                    .decoration(TextDecoration.ITALIC, false)
+                    .decoration(TextDecoration.OBFUSCATED, false)
+                    .build();
     }
 }
