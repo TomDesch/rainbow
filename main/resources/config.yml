@@ -1,0 +1,10 @@
+cycle-speed: 5
+formatted-example-message: To format your messages, use &(r,g,b) format, for example
+  &(123,456,789) to set colors, and mix it up with decorators like &b &o &u &i &s
+  to make your text bold, obfuscated, underlined, italic or strikethrough :) Use &r
+  to reset decorations.
+plugin-reloaded-message: '&(75,255,75)Rainbow armor plugin reloaded.'
+no-permission-message: '&(255,0,0)You don''t have permission to use this command.'
+armor-enabled-message: '&(75,255,75)Rainbow armor enabled.'
+armor-disabled-message: '&(249,255,68)Rainbow armor disabled.'
+no-empty-spaces-message: Your rainbow armor was removed!
