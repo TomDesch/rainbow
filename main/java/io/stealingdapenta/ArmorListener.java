@@ -22,7 +22,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class ArmorListener implements Listener {
 
-    public static final ArrayList<String> playersWearingRainbowArmor = new ArrayList<>();
+    public static ArrayList<String> playersWearingRainbowArmor = new ArrayList<>();
 
     public static final ItemStack AIR_ITEM = new ItemStack(Material.AIR);
     public static final ItemStack[] AIR_ARMOR = {AIR_ITEM, AIR_ITEM, AIR_ITEM, AIR_ITEM};
@@ -71,39 +71,29 @@ public class ArmorListener implements Listener {
             return;
         }
 
-        // Cancel the event if the player is wearing rainbow armor and clicks an armor slot
-        if (event.getSlotType()
-                 .equals(SlotType.ARMOR)) {
+        // Cancel if clicking on an armor slot directly
+        if (SlotType.ARMOR.equals(event.getSlotType())) {
             event.setCancelled(true);
+            return;
         }
 
-        // Additional check for shift-clicking armor in any slot
-        if (isPlayerInventory(clickedInventory)
-                && event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY
+        // Cancel shift-clicking armor into armor slots
+        if (InventoryAction.MOVE_TO_OTHER_INVENTORY.equals(event.getAction()) && isPlayerInventory(clickedInventory)
                 && isArmorItem(event.getCurrentItem())) {
             event.setCancelled(true);
         }
     }
 
     private boolean isPlayerInventory(Inventory inventory) {
-        return inventory.getType()
-                        .equals(InventoryType.PLAYER);
+        return InventoryType.PLAYER.equals(inventory.getType());
     }
 
     private boolean isArmorItem(ItemStack item) {
-        return Objects.nonNull(item)
-                && item.getType()
-                       .name()
-                       .endsWith("_HELMET")
-                || item.getType()
-                       .name()
-                       .endsWith("_CHESTPLATE")
-                || item.getType()
-                       .name()
-                       .endsWith("_LEGGINGS")
-                || item.getType()
-                       .name()
-                       .endsWith("_BOOTS");
+        if (item == null) {
+            return false;
+        }
+        String type = item.getType()
+                          .name();
+        return type.endsWith("_HELMET") || type.endsWith("_CHESTPLATE") || type.endsWith("_LEGGINGS") || type.endsWith("_BOOTS");
     }
-
 }
