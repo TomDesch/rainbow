@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryAction;
@@ -29,7 +30,7 @@ public class ArmorListener implements Listener {
      *
      * @param event The quit event triggered when a player leaves the server.
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void playerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
@@ -44,7 +45,7 @@ public class ArmorListener implements Listener {
      *
      * @param event The death event triggered when a player dies.
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
@@ -62,7 +63,7 @@ public class ArmorListener implements Listener {
      *
      * @param event The interaction event triggered when a player right- or left-clicks.
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
@@ -89,12 +90,12 @@ public class ArmorListener implements Listener {
      *   <li>Shift-clicking armor to auto-equip</li>
      *   <li>Placing armor from the cursor</li>
      *   <li>Dragging and dropping armor</li>
-     *   <li>Using number keys to swap hotbar items into armor slots</li>
+     *   <li>Using number keys to swap hot bar items into armor slots</li>
      * </ul>
      *
      * @param event The inventory click event triggered by any click in an inventory.
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void inventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
 
