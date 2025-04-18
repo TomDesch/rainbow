@@ -21,6 +21,7 @@ public enum ArmorPieceFactory {
     public static final Material BOOTS_MATERIAL = Material.LEATHER_BOOTS;
     private static final String ARMOR_TAG_KEY = "Rainbow-Armor";
     private static final String SPEED_TAG_KEY = "Cycle-Speed";
+    private static final String COLOR_COUNT_KEY = "Color-Count";
 
     /**
      * Creates a full set of leather armor tagged as rainbow armor with a given cycle speed.
@@ -63,6 +64,27 @@ public enum ArmorPieceFactory {
     }
 
     /**
+     * @return The NamespacedKey used to store the counter of the current color of rainbow armor.
+     */
+    public static NamespacedKey getColorCountKey() {
+        return new NamespacedKey(Rainbow.getInstance(), COLOR_COUNT_KEY);
+    }
+
+    /**
+     * @return The NamespacedKey used to identify rainbow armor items.
+     */
+    public static NamespacedKey getArmorTagKey() {
+        return new NamespacedKey(Rainbow.getInstance(), ARMOR_TAG_KEY);
+    }
+
+    /**
+     * @return The NamespacedKey used to store the cycle speed of rainbow armor.
+     */
+    public static NamespacedKey getCycleSpeedKey() {
+        return new NamespacedKey(Rainbow.getInstance(), SPEED_TAG_KEY);
+    }
+
+    /**
      * Creates a single rainbow armor piece of the given type, tagged with animation settings.
      *
      * @param material   The leather armor material (helmet, chestplate, etc).
@@ -84,22 +106,9 @@ public enum ArmorPieceFactory {
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(getArmorTagKey(), PersistentDataType.BYTE, (byte) 1);
         container.set(getCycleSpeedKey(), PersistentDataType.INTEGER, cycleSpeed);
+        container.set(getColorCountKey(), PersistentDataType.INTEGER, 0);
 
         armorPiece.setItemMeta(meta);
         return armorPiece;
-    }
-
-    /**
-     * @return The NamespacedKey used to identify rainbow armor items.
-     */
-    public static NamespacedKey getArmorTagKey() {
-        return new NamespacedKey(Rainbow.getInstance(), ARMOR_TAG_KEY);
-    }
-
-    /**
-     * @return The NamespacedKey used to store the cycle speed of rainbow armor.
-     */
-    public static NamespacedKey getCycleSpeedKey() {
-        return new NamespacedKey(Rainbow.getInstance(), SPEED_TAG_KEY);
     }
 }
