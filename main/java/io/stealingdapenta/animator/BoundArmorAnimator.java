@@ -23,7 +23,7 @@ public class BoundArmorAnimator extends BukkitRunnable {
 
 
     public BoundArmorAnimator(Player player) {
-        this.cycleSpeed = (int) CYCLE_SPEED.getValue();
+        this.cycleSpeed = CYCLE_SPEED.asInt();
         this.player = player;
     }
 

@@ -47,17 +47,6 @@ public enum ConfigKey {
         return defaultValue;
     }
 
-    public Object getValue() {
-        if (defaultValue instanceof String) {
-            return asString();
-        } else if (defaultValue instanceof Integer) {
-            return asInt();
-        } else if (defaultValue instanceof Boolean) {
-            return asBoolean();
-        }
-        return null;
-    }
-
     public TextComponent getFormattedMessage() {
         return textUtil.parseFormattedString(asString());
     }
@@ -74,7 +63,7 @@ public enum ConfigKey {
                       .getInt(getKey());
     }
 
-    private boolean asBoolean() {
+    public boolean asBoolean() {
         return Rainbow.getInstance()
                       .getConfig()
                       .getBoolean(getKey(), (Boolean) defaultValue);
