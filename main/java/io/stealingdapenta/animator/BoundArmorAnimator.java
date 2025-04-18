@@ -1,7 +1,8 @@
-package io.stealingdapenta;
+package io.stealingdapenta.animator;
 
 import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
+import static io.stealingdapenta.animator.AnimatorUtil.convertCountToRGB;
 import static io.stealingdapenta.config.ConfigKey.CYCLE_SPEED;
 
 import java.util.function.Consumer;
@@ -13,7 +14,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Armor extends BukkitRunnable {
+public class BoundArmorAnimator extends BukkitRunnable {
 
     private final Player player;
     private int count = 0;
@@ -21,12 +22,12 @@ public class Armor extends BukkitRunnable {
     private final int cycleSpeed;
 
 
-    public Armor(Player player) {
-        this.cycleSpeed = (int) CYCLE_SPEED.getValue();
+    public BoundArmorAnimator(Player player) {
+        this.cycleSpeed = CYCLE_SPEED.asInt();
         this.player = player;
     }
 
-    public Armor(Player player, int cycleSpeed) {
+    public BoundArmorAnimator(Player player, int cycleSpeed) {
         this.player = player;
         this.cycleSpeed = cycleSpeed;
     }
@@ -67,12 +68,5 @@ public class Armor extends BukkitRunnable {
         meta.setColor(armorColor);
         item.setItemMeta(meta);
         return item;
-    }
-
-    private Color convertCountToRGB(int count) {
-        int red = (int) (Math.sin(count * 0.01) * 127 + 128);
-        int green = (int) (Math.sin(count * 0.01 + 2) * 127 + 128);
-        int blue = (int) (Math.sin(count * 0.01 + 4) * 127 + 128);
-        return Color.fromRGB(red, green, blue);
     }
 }

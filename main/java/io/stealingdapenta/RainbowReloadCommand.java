@@ -24,6 +24,10 @@ public class RainbowReloadCommand implements CommandExecutor {
 
         Rainbow.getInstance()
                .reloadConfig();
+
+        Rainbow.getInstance()
+               .startItemBoundArmorAnimator();
+
         player.sendMessage(PLUGIN_RELOADED_MESSAGE.getFormattedMessage());
         return true;
     }

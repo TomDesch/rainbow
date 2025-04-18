@@ -1,5 +1,5 @@
 name: RainbowArmor
-version: 2.6
+version: 3.0
 main: io.stealingdapenta.rainbow.Rainbow
 author: StealingDaPenta
 description: Fancy rainbow armor
@@ -7,12 +7,14 @@ api-version: 1.21
 
 commands:
   rainbow:
-    usage: /<command> <optional cycle speed>
     description: Equip / unequip rainbow armor
-    default: op
+    usage: /rainbow [optional cycleSpeed]
   rainbowreload:
-    description: Reload the configuration file without having to reboot the server.
-    usage: /<command>
+    description: Reload the configuration file without having to reboot the server
+    usage: /rainbowreload
+  rainbowitem:
+    description: Gives a rainbow armor set with optional animation speed
+    usage: /rainbowitem [optional cycleSpeed]
 
 permissions:
   rainbow.use:
@@ -20,4 +22,7 @@ permissions:
     default: op
   rainbow.reload:
     description: Allow usage of /rainbowreload
+    default: op
+  rainbow.item:
+    description: Allow usage of /rainbowitem
     default: op
