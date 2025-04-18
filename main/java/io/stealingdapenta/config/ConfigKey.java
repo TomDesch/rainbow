@@ -16,7 +16,16 @@ public enum ConfigKey {
     ARMOR_DISABLED_MESSAGE("armor-disabled-message", "&(249,255,68)Rainbow armor disabled."),
     NO_EMPTY_SPACES_MESSAGE("no-empty-spaces-message", "&(255,0,0)You must have empty armor slots in order to use rainbow armor."),
     NOT_ENOUGH_EMPTY_SPACES_MESSAGE("not-enough-empty-spaces-message", "&(255,0,0)You must have 4 empty inventory slots in order to use rainbow armor."),
-    ARMOR_REMOVED_MESSAGE("no-empty-spaces-message", "Your rainbow armor was removed!");
+    ARMOR_REMOVED_MESSAGE("no-empty-spaces-message", "Your rainbow armor was removed!"),
+    CHECK_CURSOR_ITEMS("check-cursor-items", false),
+    CHECK_PLAYER_INVENTORY("check-player-inventory", false),
+    CHECK_OPEN_INVENTORIES("check-open-inventories", false),
+    CHECK_GROUND_ITEMS("check-ground-items", false),
+    CHECK_BLOCK_INVENTORIES("check-block-inventories", false),
+    CHECK_ARMOR_STANDS("check-armor-stands", false),
+    CHECK_ITEM_FRAMES("check-item-frames", false),
+    CHECK_MOB_ARMOR("check-mob-armor", false);
+
 
 
     private final String key;

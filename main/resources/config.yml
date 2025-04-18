@@ -8,3 +8,14 @@ no-permission-message: '&(255,0,0)You don''t have permission to use this command
 armor-enabled-message: '&(75,255,75)Rainbow armor enabled.'
 armor-disabled-message: '&(249,255,68)Rainbow armor disabled.'
 no-empty-spaces-message: Your rainbow armor was removed!
+
+# The following settings are used to check for the presence of tagged rainbow armor in various inventories.
+# Enabling any of these will put extra strain on the server, so be careful.
+check-cursor-items: false
+check-player-inventory: false
+check-open-inventories: false
+check-ground-items: false
+check-block-inventories: false
+check-armor-stands: false
+check-item-frames: false
+check-mob-armor: false
