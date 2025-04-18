@@ -8,6 +8,7 @@ import static io.stealingdapenta.config.ConfigKey.PLAYERS_ONLY_MESSAGE;
 import static io.stealingdapenta.config.PermissionNode.RAINBOW_ITEM_USE;
 
 import io.stealingdapenta.ArmorPieceFactory;
+import io.stealingdapenta.config.ConfigKey;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,7 +42,7 @@ public class RainbowItemCommand implements CommandExecutor {
             return true;
         }
 
-        int cycleSpeed = 5; // Default
+        int cycleSpeed = ConfigKey.CYCLE_SPEED.getValue(); // Default
         if (args.length > 0) {
             try {
                 cycleSpeed = Integer.parseInt(args[0]);

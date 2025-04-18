@@ -49,39 +49,35 @@ public enum ConfigKey {
 
     public Object getValue() {
         if (defaultValue instanceof String) {
-            return getStringValue();
+            return asString();
         } else if (defaultValue instanceof Integer) {
-            return getIntValue();
+            return asInt();
         } else if (defaultValue instanceof Boolean) {
-            return getBooleanValue();
+            return asBoolean();
         }
         return null;
     }
 
     public TextComponent getFormattedMessage() {
-        return textUtil.parseFormattedString(getStringValue());
+        return textUtil.parseFormattedString(asString());
     }
 
-    private String getStringValue() {
+    private String asString() {
         return Rainbow.getInstance()
                       .getConfig()
                       .getString(getKey());
     }
 
-    private int getIntValue() {
+    private int asInt() {
         return Rainbow.getInstance()
                       .getConfig()
                       .getInt(getKey());
     }
 
-    private boolean getBooleanValue() {
+    private boolean asBoolean() {
         return Rainbow.getInstance()
                       .getConfig()
                       .getBoolean(getKey(), (Boolean) defaultValue);
-    }
-
-    public boolean asBoolean() {
-        return getBooleanValue();
     }
 
     @Override
