@@ -5,15 +5,18 @@ import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
 
 import io.stealingdapenta.ArmorListener;
 import io.stealingdapenta.RainbowReloadCommand;
+import io.stealingdapenta.animator.TaggedArmorAnimator;
 import io.stealingdapenta.command.RainbowCommand;
 import io.stealingdapenta.command.RainbowItemCommand;
 import io.stealingdapenta.config.ConfigKey;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Logger;
+import javax.annotation.Nullable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Main class for the RainbowArmor plugin. Handles lifecycle events, command and event registration, and configuration setup.
@@ -31,6 +34,8 @@ public class Rainbow extends JavaPlugin {
     private final RainbowReloadCommand reloadCommand = new RainbowReloadCommand();
     private final RainbowItemCommand rainbowItemCommand = new RainbowItemCommand();
 
+    private BukkitTask armorAnimatorTask;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -45,7 +50,24 @@ public class Rainbow extends JavaPlugin {
         registerCommand("rainbowreload", reloadCommand);
         registerCommand("rainbowitem", rainbowItemCommand);
 
+        startItemBoundArmorAnimator();
+
         logger.info(PLUGIN_ENABLED);
+    }
+
+    public void startItemBoundArmorAnimator() {
+        if (ConfigKey.ARMOR_ITEM_FEATURE.asBoolean()) {
+            if (this.armorAnimatorTask != null) {
+                this.armorAnimatorTask.cancel();
+            }
+            logger.warning("Rainbow item feature is enabled in the config. Starting the animator.");
+            armorAnimatorTask = new TaggedArmorAnimator().runTaskTimer(this, 0, 1L);
+        }
+    }
+
+    @Nullable
+    public BukkitTask getArmorAnimatorTask() {
+        return armorAnimatorTask;
     }
 
     @Override
