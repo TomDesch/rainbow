@@ -63,6 +63,7 @@ formatted-example-message: >
 check-player-inventory: true
 
 # Whether to animate armor visible in open containers (e.g., crafting table, chest UI).
+# Keep this disabled if you want to be able to rename items in anvil.
 check-open-inventories: false
 
 # Whether to animate armor stored inside chests, barrels, shulkers, etc.
