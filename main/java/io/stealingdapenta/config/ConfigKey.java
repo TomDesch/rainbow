@@ -21,13 +21,9 @@ public enum ConfigKey {
     ARMOR_REMOVED_MESSAGE("no-empty-spaces-message", "Your rainbow armor was removed!"),
     ARMOR_ITEM_FEATURE("armor-item-feature", true),
     CHECK_CURSOR_ITEMS("check-cursor-items", false),
-    CHECK_PLAYER_INVENTORY("check-player-inventory", false),
+    CHECK_PLAYER_INVENTORY("check-player-inventory", true),
     CHECK_OPEN_INVENTORIES("check-open-inventories", false),
-    CHECK_GROUND_ITEMS("check-ground-items", false),
-    CHECK_BLOCK_INVENTORIES("check-block-inventories", false),
-    CHECK_ARMOR_STANDS("check-armor-stands", false),
-    CHECK_ITEM_FRAMES("check-item-frames", false),
-    CHECK_MOB_ARMOR("check-mob-armor", false);
+    CHECK_BLOCK_INVENTORIES("check-block-inventories", false);
 
 
     private final String key;

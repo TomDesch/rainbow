@@ -59,26 +59,11 @@ formatted-example-message: >
 # ⚠️ WARNING: Enabling too many options may cause performance issues on larger servers.
 # ==========================================================
 
-# Whether to animate rainbow armor on players' cursors.
-check-cursor-items: false
-
 # Whether to animate rainbow armor inside players' inventories.
-check-player-inventory: false
+check-player-inventory: true
 
 # Whether to animate armor visible in open containers (e.g., crafting table, chest UI).
 check-open-inventories: false
 
-# Whether to animate armor dropped on the ground.
-check-ground-items: false
-
 # Whether to animate armor stored inside chests, barrels, shulkers, etc.
 check-block-inventories: false
-
-# Whether to animate armor worn by armor stands.
-check-armor-stands: false
-
-# Whether to animate armor shown in item frames.
-check-item-frames: false
-
-# Whether to animate armor worn by mobs (e.g., zombies, skeletons).
-check-mob-armor: false
