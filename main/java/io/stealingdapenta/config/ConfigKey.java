@@ -7,8 +7,7 @@ import net.kyori.adventure.text.TextComponent;
 public enum ConfigKey {
     CYCLE_SPEED("cycle-speed", 5),
     UNUSED_MESSAGE_EXAMPLE("formatted-example-message",
-                           "To format your messages, use &(r,g,b) format, for example &(123,456,789) to set colors, "
-                                   + "and mix it up with decorators like &b &o &u &i &s to make your text bold, obfuscated, underlined, italic or strikethrough :) "
+                           "To format your messages, use &(r,g,b) format, for example &(123,456,789) to set colors, " + "and mix it up with decorators like &b &o &u &i &s to make your text bold, obfuscated, underlined, italic or strikethrough :) "
                                    + "Use &r to reset decorations."),
     PLUGIN_RELOADED_MESSAGE("plugin-reloaded-message", "&(75,255,75)Rainbow armor plugin reloaded."),
     NO_PERMISSION_MESSAGE("no-permission-message", "&(255,0,0)You don't have permission to use this command."),
@@ -25,7 +24,6 @@ public enum ConfigKey {
     CHECK_ARMOR_STANDS("check-armor-stands", false),
     CHECK_ITEM_FRAMES("check-item-frames", false),
     CHECK_MOB_ARMOR("check-mob-armor", false);
-
 
 
     private final String key;
@@ -52,8 +50,10 @@ public enum ConfigKey {
             return getStringValue();
         } else if (defaultValue instanceof Integer) {
             return getIntValue();
+        } else if (defaultValue instanceof Boolean) {
+            return getBooleanValue();
         }
-        return 0;
+        return null;
     }
 
     public TextComponent getFormattedMessage() {
@@ -72,11 +72,19 @@ public enum ConfigKey {
                       .getInt(getKey());
     }
 
+    private boolean getBooleanValue() {
+        return Rainbow.getInstance()
+                      .getConfig()
+                      .getBoolean(getKey(), (Boolean) defaultValue);
+    }
+
+    public boolean asBoolean() {
+        return getBooleanValue();
+    }
+
     @Override
     public String toString() {
-        return "ConfigKey{" +
-                "key='" + key + '\'' +
-                '}';
+        return "ConfigKey{" + "key='" + key + '\'' + '}';
     }
 }
 
