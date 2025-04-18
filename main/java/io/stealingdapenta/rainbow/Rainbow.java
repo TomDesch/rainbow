@@ -12,7 +12,6 @@ import io.stealingdapenta.config.ConfigKey;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Logger;
-import javax.annotation.Nullable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -57,17 +56,12 @@ public class Rainbow extends JavaPlugin {
 
     public void startItemBoundArmorAnimator() {
         if (ConfigKey.ARMOR_ITEM_FEATURE.asBoolean()) {
-            if (this.armorAnimatorTask != null) {
-                this.armorAnimatorTask.cancel();
+            if (armorAnimatorTask != null) {
+                armorAnimatorTask.cancel();
             }
             logger.warning("Rainbow item feature is enabled in the config. Starting the animator.");
             armorAnimatorTask = new TaggedArmorAnimator().runTaskTimer(this, 0, 1L);
         }
-    }
-
-    @Nullable
-    public BukkitTask getArmorAnimatorTask() {
-        return armorAnimatorTask;
     }
 
     @Override
@@ -81,6 +75,10 @@ public class Rainbow extends JavaPlugin {
                 logger.warning(PLAYER_NOT_FOUND.formatted(playerName));
             }
         });
+
+        if (armorAnimatorTask != null) {
+            armorAnimatorTask.cancel();
+        }
 
         logger.info(PLUGIN_DISABLED);
     }
