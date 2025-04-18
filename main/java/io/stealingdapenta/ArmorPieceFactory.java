@@ -87,7 +87,7 @@ public enum ArmorPieceFactory {
     /**
      * Creates a single rainbow armor piece of the given type, tagged with animation settings.
      *
-     * @param material   The leather armor material (helmet, chestplate, etc).
+     * @param material   The leather armor material (helmet, chestplate, etc.).
      * @param cycleSpeed The animation cycle speed to embed in the item.
      * @return A fully tagged rainbow armor ItemStack.
      */
