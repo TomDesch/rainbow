@@ -18,7 +18,7 @@ public class TaggedArmorAnimator extends BukkitRunnable {
 
     private static final int THRESHOLD = 5000;
     private final int cycleSpeed;
-    private final NamespacedKey tagKey = new NamespacedKey(Rainbow.getInstance(), ArmorPieceFactory.ARMOR_NSK);
+    private final NamespacedKey tagKey = new NamespacedKey(Rainbow.getInstance(), ArmorPieceFactory.ARMOR_TAG_KEY);
     private int count = 0;
 
     public TaggedArmorAnimator(int cycleSpeed) {
@@ -29,6 +29,7 @@ public class TaggedArmorAnimator extends BukkitRunnable {
     public void run() {
         Color color = convertCountToRGB(count);
 
+        // todo this seems like
         for (Player player : Bukkit.getOnlinePlayers()) {
             for (ItemStack armorPiece : player.getInventory()
                                               .getArmorContents()) {

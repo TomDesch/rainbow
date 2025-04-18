@@ -10,7 +10,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 /**
- * Singleton factory for creating and identifying special rainbow armor pieces. Uses PersistentDataContainer tags to track and verify custom items.
+ * Singleton factory for creating and identifying special rainbow armor pieces. Rainbow armor is tagged using the PersistentDataContainer with both a boolean identity and a configurable cycle speed value.
  */
 public enum ArmorPieceFactory {
     ARMOR_PIECE_FACTORY;
@@ -19,78 +19,57 @@ public enum ArmorPieceFactory {
     public static final Material CHESTPLATE_MATERIAL = Material.LEATHER_CHESTPLATE;
     public static final Material LEGGINGS_MATERIAL = Material.LEATHER_LEGGINGS;
     public static final Material BOOTS_MATERIAL = Material.LEATHER_BOOTS;
-    public static final String ARMOR_NSK = "Rainbow-Armor";
+    public static final String ARMOR_TAG_KEY = "Rainbow-Armor";
+    public static final String SPEED_TAG_KEY = "Cycle-Speed";
 
     /**
-     * Creates a full set of tagged rainbow armor pieces (helmet, chestplate, leggings, boots).
+     * Creates a full set of leather armor tagged as rainbow armor with a given cycle speed.
      *
-     * @return An array of 4 leather armor items marked as rainbow armor.
+     * @param cycleSpeed The animation cycle speed to tag into each piece.
+     * @return An array containing the helmet, chestplate, leggings, and boots.
      */
-    public ItemStack[] createArmorSet() {
-        return new ItemStack[]{createHelmet(), createChestplate(), createLeggings(), createBoots()};
+    public ItemStack[] createArmorSet(int cycleSpeed) {
+        return new ItemStack[]{createArmorPiece(HELMET_MATERIAL, cycleSpeed), createArmorPiece(CHESTPLATE_MATERIAL, cycleSpeed), createArmorPiece(LEGGINGS_MATERIAL, cycleSpeed), createArmorPiece(BOOTS_MATERIAL, cycleSpeed)};
     }
 
     /**
-     * Checks if a given ItemStack is one of the special rainbow armor pieces by checking for the PersistentDataContainer tag.
+     * Checks if the given item is a rainbow armor piece by checking its persistent tags.
      *
      * @param itemStack The item to check.
      * @return True if the item is a rainbow armor piece, false otherwise.
      */
     public boolean isRainbowArmorPiece(ItemStack itemStack) {
-        if (itemStack == null || itemStack.getItemMeta() == null) {
-            return false;
-        }
-
-        if (!(itemStack.getItemMeta() instanceof LeatherArmorMeta meta)) {
+        if (itemStack == null || !(itemStack.getItemMeta() instanceof LeatherArmorMeta meta)) {
             return false;
         }
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        return container.has(getRainbowArmorNSK(), PersistentDataType.BYTE);
+        return container.has(getArmorTagKey(), PersistentDataType.BYTE);
     }
 
     /**
-     * @return The NamespacedKey used to tag rainbow armor.
-     */
-    private NamespacedKey getRainbowArmorNSK() {
-        return new NamespacedKey(Rainbow.getInstance(), ARMOR_NSK);
-    }
-
-    /**
-     * @return A tagged leather helmet item.
-     */
-    private ItemStack createHelmet() {
-        return createArmorPiece(HELMET_MATERIAL);
-    }
-
-    /**
-     * @return A tagged leather chestplate item.
-     */
-    private ItemStack createChestplate() {
-        return createArmorPiece(CHESTPLATE_MATERIAL);
-    }
-
-    /**
-     * @return A tagged leather leggings item.
-     */
-    private ItemStack createLeggings() {
-        return createArmorPiece(LEGGINGS_MATERIAL);
-    }
-
-    /**
-     * @return A tagged leather boots item.
-     */
-    private ItemStack createBoots() {
-        return createArmorPiece(BOOTS_MATERIAL);
-    }
-
-    /**
-     * Creates a tagged leather armor item with a placeholder color and PersistentData flag.
+     * Gets the cycle speed value embedded into a rainbow armor piece, or -1 if not found.
      *
-     * @param material The leather armor material to use (helmet, chestplate, etc).
-     * @return A tagged ItemStack that is recognized as rainbow armor.
+     * @param itemStack The tagged rainbow armor item.
+     * @return The configured cycle speed, or -1 if missing or invalid.
      */
-    private ItemStack createArmorPiece(Material material) {
+    public int getCycleSpeed(ItemStack itemStack) {
+        if (itemStack == null || !(itemStack.getItemMeta() instanceof LeatherArmorMeta meta)) {
+            return -1;
+        }
+
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        return container.getOrDefault(getCycleSpeedKey(), PersistentDataType.INTEGER, -1);
+    }
+
+    /**
+     * Creates a single rainbow armor piece of the given type, tagged with animation settings.
+     *
+     * @param material   The leather armor material (helmet, chestplate, etc).
+     * @param cycleSpeed The animation cycle speed to embed in the item.
+     * @return A fully tagged rainbow armor ItemStack.
+     */
+    private ItemStack createArmorPiece(Material material, int cycleSpeed) {
         ItemStack armorPiece = new ItemStack(material);
         LeatherArmorMeta meta = (LeatherArmorMeta) armorPiece.getItemMeta();
 
@@ -101,11 +80,26 @@ public enum ArmorPieceFactory {
             return null;
         }
 
-        meta.setColor(Color.GREEN); // Placeholder; gets animated later
-        meta.getPersistentDataContainer()
-            .set(getRainbowArmorNSK(), PersistentDataType.BYTE, (byte) 1);
+        meta.setColor(Color.GREEN); // Placeholder; will be updated by animation
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        container.set(getArmorTagKey(), PersistentDataType.BYTE, (byte) 1);
+        container.set(getCycleSpeedKey(), PersistentDataType.INTEGER, cycleSpeed);
 
         armorPiece.setItemMeta(meta);
         return armorPiece;
+    }
+
+    /**
+     * @return The NamespacedKey used to identify rainbow armor items.
+     */
+    private NamespacedKey getArmorTagKey() {
+        return new NamespacedKey(Rainbow.getInstance(), ARMOR_TAG_KEY);
+    }
+
+    /**
+     * @return The NamespacedKey used to store the cycle speed of rainbow armor.
+     */
+    private NamespacedKey getCycleSpeedKey() {
+        return new NamespacedKey(Rainbow.getInstance(), SPEED_TAG_KEY);
     }
 }

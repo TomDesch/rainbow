@@ -39,7 +39,7 @@ public class RainbowItemCommand implements CommandExecutor { // todo register me
         if (args.length > 0) {
             try {
                 int cycleSpeed = Integer.parseInt(args[0]);
-                ItemStack[] armorSet = ArmorPieceFactory.ARMOR_PIECE_FACTORY.createArmorSet();
+                ItemStack[] armorSet = ArmorPieceFactory.ARMOR_PIECE_FACTORY.createArmorSet(cycleSpeed);
 
             } catch (NumberFormatException e) {
                 return false;
