@@ -15,6 +15,7 @@ public enum ConfigKey {
     ARMOR_ENABLED_MESSAGE("armor-enabled-message", "&(75,255,75)Rainbow armor enabled."),
     ARMOR_DISABLED_MESSAGE("armor-disabled-message", "&(249,255,68)Rainbow armor disabled."),
     NO_EMPTY_SPACES_MESSAGE("no-empty-spaces-message", "&(255,0,0)You must have empty armor slots in order to use rainbow armor."),
+    NOT_ENOUGH_EMPTY_SPACES_MESSAGE("not-enough-empty-spaces-message", "&(255,0,0)You must have 4 empty inventory slots in order to use rainbow armor."),
     ARMOR_REMOVED_MESSAGE("no-empty-spaces-message", "Your rainbow armor was removed!");
 
 
