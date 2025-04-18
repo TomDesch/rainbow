@@ -4,8 +4,8 @@ import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
 
 import io.stealingdapenta.ArmorListener;
-import io.stealingdapenta.RainbowCommand;
 import io.stealingdapenta.RainbowReloadCommand;
+import io.stealingdapenta.command.RainbowCommand;
 import io.stealingdapenta.config.ConfigKey;
 import java.util.Arrays;
 import java.util.Objects;

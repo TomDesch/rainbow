@@ -21,6 +21,7 @@ import org.bukkit.inventory.PlayerInventory;
 public class ArmorListener implements Listener {
 
     public static ArrayList<String> playersWearingRainbowArmor = new ArrayList<>();
+    public static ArrayList<String> playersWearingItemBoundRainbowArmor = new ArrayList<>();
 
     public static final ItemStack AIR_ITEM = new ItemStack(Material.AIR);
     public static final ItemStack[] AIR_ARMOR = {AIR_ITEM, AIR_ITEM, AIR_ITEM, AIR_ITEM};

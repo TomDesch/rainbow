@@ -1,4 +1,4 @@
-package io.stealingdapenta;
+package io.stealingdapenta.command;
 
 import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
@@ -8,6 +8,7 @@ import static io.stealingdapenta.config.ConfigKey.NO_EMPTY_SPACES_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
 import static io.stealingdapenta.config.PermissionNode.RAINBOW_USE;
 
+import io.stealingdapenta.Armor;
 import io.stealingdapenta.rainbow.Rainbow;
 import java.util.Arrays;
 import java.util.Objects;
