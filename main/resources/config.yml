@@ -1,21 +1,84 @@
+# ==========================================================
+# 🌈 Rainbow Armor Plugin Configuration
+# Version: 3.0
+# Author: StealingDaPenta
+# ==========================================================
+
+# ==========================================================
+# 🌈 GENERAL SETTINGS
+# ==========================================================
+
+# Cycle speed (animation tick rate). Higher = faster color shifts.
 cycle-speed: 5
-formatted-example-message: To format your messages, use &(r,g,b) format, for example
-  &(123,456,789) to set colors, and mix it up with decorators like &b &o &u &i &s
-  to make your text bold, obfuscated, underlined, italic or strikethrough :) Use &r
-  to reset decorations.
-plugin-reloaded-message: '&(75,255,75)Rainbow armor plugin reloaded.'
+
+# Whether the /rainbowitem command (item-bound rainbow armor) is enabled.
+armor-item-feature: true
+
+# ==========================================================
+# 🛑 PERMISSION MESSAGES & FEEDBACK
+# ==========================================================
+
+# Sent to players who try to use commands without permission.
 no-permission-message: '&(255,0,0)You don''t have permission to use this command.'
+
+# Sent when the plugin reloads successfully.
+plugin-reloaded-message: '&(75,255,75)Rainbow armor plugin reloaded.'
+
+# Sent when a player enables or disables rainbow armor.
 armor-enabled-message: '&(75,255,75)Rainbow armor enabled.'
 armor-disabled-message: '&(249,255,68)Rainbow armor disabled.'
+
+# Sent when rainbow armor is forcibly removed.
 no-empty-spaces-message: Your rainbow armor was removed!
 
-# The following settings are used to check for the presence of tagged rainbow armor in various inventories.
-# Enabling any of these will put extra strain on the server, so be careful.
+# Sent when player tries to equip armor but lacks inventory space.
+not-enough-empty-spaces-message: '&(255,0,0)You must have 4 empty inventory slots in order to use rainbow armor.'
+
+# Sent when someone uses a player-only command from console.
+players-only-message: '&(255,0,0)This command can only be used by players.'
+
+# Sent when the cycle speed input is invalid.
+invalid-cycle-speed: §cInvalid cycle speed. Please enter a positive number.
+
+# Sent when a command is used while a feature is disabled in the config.
+feature-disabled-message: '&(249,255,68)This feature is disabled. Please contact the server administrator if this is an error.'
+
+# ==========================================================
+# 🎨 FORMATTING HELP (for custom messages)
+# ==========================================================
+
+# Example to guide users on how to format messages with RGB and styles.
+formatted-example-message: >
+  To format your messages, use &(r,g,b) format, for example &(123,456,789) to set colors, 
+  and mix it up with decorators like &b &o &u &i &s to make your text bold, obfuscated, 
+  underlined, italic or strikethrough :) Use &r to reset decorations.
+
+# ==========================================================
+# 🧪 ARMOR DETECTION SCAN SETTINGS
+# These settings control where the rainbow animation will search for tagged armor.
+# ⚠️ WARNING: Enabling too many options may cause performance issues on larger servers.
+# ==========================================================
+
+# Whether to animate rainbow armor on players' cursors.
 check-cursor-items: false
+
+# Whether to animate rainbow armor inside players' inventories.
 check-player-inventory: false
+
+# Whether to animate armor visible in open containers (e.g., crafting table, chest UI).
 check-open-inventories: false
+
+# Whether to animate armor dropped on the ground.
 check-ground-items: false
+
+# Whether to animate armor stored inside chests, barrels, shulkers, etc.
 check-block-inventories: false
+
+# Whether to animate armor worn by armor stands.
 check-armor-stands: false
+
+# Whether to animate armor shown in item frames.
 check-item-frames: false
+
+# Whether to animate armor worn by mobs (e.g., zombies, skeletons).
 check-mob-armor: false
