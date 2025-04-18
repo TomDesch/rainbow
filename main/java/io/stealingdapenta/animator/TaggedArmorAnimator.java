@@ -3,7 +3,6 @@ package io.stealingdapenta.animator;
 import static io.stealingdapenta.animator.AnimatorUtil.convertCountToRGB;
 
 import io.stealingdapenta.ArmorPieceFactory;
-import io.stealingdapenta.rainbow.Rainbow;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
@@ -18,7 +17,7 @@ public class TaggedArmorAnimator extends BukkitRunnable {
 
     private static final int THRESHOLD = 5000;
     private final int cycleSpeed;
-    private final NamespacedKey tagKey = new NamespacedKey(Rainbow.getInstance(), ArmorPieceFactory.ARMOR_TAG_KEY);
+    private final NamespacedKey tagKey = ArmorPieceFactory.getArmorTagKey();
     private int count = 0;
 
     public TaggedArmorAnimator(int cycleSpeed) {

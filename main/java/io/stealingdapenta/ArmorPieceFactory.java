@@ -19,8 +19,8 @@ public enum ArmorPieceFactory {
     public static final Material CHESTPLATE_MATERIAL = Material.LEATHER_CHESTPLATE;
     public static final Material LEGGINGS_MATERIAL = Material.LEATHER_LEGGINGS;
     public static final Material BOOTS_MATERIAL = Material.LEATHER_BOOTS;
-    public static final String ARMOR_TAG_KEY = "Rainbow-Armor";
-    public static final String SPEED_TAG_KEY = "Cycle-Speed";
+    private static final String ARMOR_TAG_KEY = "Rainbow-Armor";
+    private static final String SPEED_TAG_KEY = "Cycle-Speed";
 
     /**
      * Creates a full set of leather armor tagged as rainbow armor with a given cycle speed.
@@ -92,14 +92,14 @@ public enum ArmorPieceFactory {
     /**
      * @return The NamespacedKey used to identify rainbow armor items.
      */
-    private NamespacedKey getArmorTagKey() {
+    public static NamespacedKey getArmorTagKey() {
         return new NamespacedKey(Rainbow.getInstance(), ARMOR_TAG_KEY);
     }
 
     /**
      * @return The NamespacedKey used to store the cycle speed of rainbow armor.
      */
-    private NamespacedKey getCycleSpeedKey() {
+    public static NamespacedKey getCycleSpeedKey() {
         return new NamespacedKey(Rainbow.getInstance(), SPEED_TAG_KEY);
     }
 }
