@@ -13,7 +13,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Armor extends BukkitRunnable {
+public class BoundArmor extends BukkitRunnable {
 
     private final Player player;
     private int count = 0;
@@ -21,12 +21,12 @@ public class Armor extends BukkitRunnable {
     private final int cycleSpeed;
 
 
-    public Armor(Player player) {
+    public BoundArmor(Player player) {
         this.cycleSpeed = (int) CYCLE_SPEED.getValue();
         this.player = player;
     }
 
-    public Armor(Player player, int cycleSpeed) {
+    public BoundArmor(Player player, int cycleSpeed) {
         this.player = player;
         this.cycleSpeed = cycleSpeed;
     }

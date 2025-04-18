@@ -8,7 +8,7 @@ import static io.stealingdapenta.config.ConfigKey.NO_EMPTY_SPACES_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
 import static io.stealingdapenta.config.PermissionNode.RAINBOW_USE;
 
-import io.stealingdapenta.Armor;
+import io.stealingdapenta.BoundArmor;
 import io.stealingdapenta.rainbow.Rainbow;
 import java.util.Arrays;
 import java.util.Objects;
@@ -45,19 +45,19 @@ public class RainbowCommand implements CommandExecutor {
 
         playersWearingRainbowArmor.add(player.getName());
 
-        Armor armor;
+        BoundArmor boundArmor;
 
         if (args.length > 0) {
             try {
-                armor = new Armor(player, Integer.parseInt(args[0]));
+                boundArmor = new BoundArmor(player, Integer.parseInt(args[0]));
             } catch (NumberFormatException e) {
                 playersWearingRainbowArmor.remove(player.getName());
                 return false;
             }
         } else {
-            armor = new Armor(player);
+            boundArmor = new BoundArmor(player);
         }
-        armor.runTaskTimer(Rainbow.getInstance(), 0L, 1L);
+        boundArmor.runTaskTimer(Rainbow.getInstance(), 0L, 1L);
         player.sendMessage(ARMOR_ENABLED_MESSAGE.getFormattedMessage());
         return true;
     }
