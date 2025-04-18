@@ -1,5 +1,7 @@
 package io.stealingdapenta.animator;
 
+import static io.stealingdapenta.ArmorPieceFactory.getColorCountKey;
+import static io.stealingdapenta.ArmorPieceFactory.getCycleSpeedKey;
 import static io.stealingdapenta.animator.AnimatorUtil.convertCountToRGB;
 import static io.stealingdapenta.config.ConfigKey.CHECK_ARMOR_STANDS;
 import static io.stealingdapenta.config.ConfigKey.CHECK_BLOCK_INVENTORIES;
@@ -11,10 +13,9 @@ import static io.stealingdapenta.config.ConfigKey.CHECK_OPEN_INVENTORIES;
 import static io.stealingdapenta.config.ConfigKey.CHECK_PLAYER_INVENTORY;
 
 import io.stealingdapenta.ArmorPieceFactory;
+import io.stealingdapenta.rainbow.Rainbow;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.Color;
-import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
@@ -28,6 +29,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -36,67 +38,59 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class TaggedArmorAnimator extends BukkitRunnable {
 
     private static final int THRESHOLD = 5000;
-    private final int cycleSpeed;
-    private final NamespacedKey tagKey = ArmorPieceFactory.getArmorTagKey();
-    private int count = 0;
 
-    public TaggedArmorAnimator(int cycleSpeed) {
-        this.cycleSpeed = cycleSpeed;
+    public TaggedArmorAnimator() {
     }
 
     @Override
     public void run() {
-        Color color = convertCountToRGB(count);
 
         // Animate player-related items
         for (Player player : Bukkit.getOnlinePlayers()) {
-            animatePlayer(player, color);
+            animatePlayer(player);
         }
 
         // Animate world-based items
         for (World world : Bukkit.getWorlds()) {
-            animateWorldEntities(world, color);
-            animateBlockInventories(world, color);
+            animateWorldEntities(world);
+            animateBlockInventories(world);
         }
 
-        count += cycleSpeed;
-        if (count >= Integer.MAX_VALUE - THRESHOLD) {
-            count = 0;
-        }
+
     }
 
     /**
      * Updates all rainbow armor related to a specific player, based on enabled config options.
      */
-    public void animatePlayer(Player player, Color color) {
+    public void animatePlayer(Player player) {
         // Equipped armor (always animated)
         for (ItemStack armorPiece : player.getInventory()
                                           .getArmorContents()) {
-            applyColorIfRainbowArmor(armorPiece, color);
+            applyColorIfRainbowArmor(armorPiece);
         }
 
         if (CHECK_CURSOR_ITEMS.asBoolean()) {
-            applyColorIfRainbowArmor(player.getItemOnCursor(), color);
+            applyColorIfRainbowArmor(player.getItemOnCursor());
         }
 
         if (CHECK_PLAYER_INVENTORY.asBoolean()) {
-            animateInventory(player.getInventory(), color);
+            animateInventory(player.getInventory());
         }
 
         if (CHECK_OPEN_INVENTORIES.asBoolean()) {
             Inventory openInventory = player.getOpenInventory()
                                             .getTopInventory();
-            animateInventory(openInventory, color);
+            animateInventory(openInventory);
         }
     }
 
     /**
      * Updates rainbow armor found on entities and ground items in the given world.
      */
-    public void animateWorldEntities(World world, Color color) {
+    public void animateWorldEntities(World world) {
         if (CHECK_GROUND_ITEMS.asBoolean()) {
             for (Item itemEntity : world.getEntitiesByClass(Item.class)) {
-                applyColorIfRainbowArmor(itemEntity.getItemStack(), color);
+                applyColorIfRainbowArmor(itemEntity.getItemStack());
             }
         }
 
@@ -104,14 +98,14 @@ public class TaggedArmorAnimator extends BukkitRunnable {
             for (ArmorStand stand : world.getEntitiesByClass(ArmorStand.class)) {
                 for (ItemStack armorPiece : stand.getEquipment()
                                                  .getArmorContents()) {
-                    applyColorIfRainbowArmor(armorPiece, color);
+                    applyColorIfRainbowArmor(armorPiece);
                 }
             }
         }
 
         if (CHECK_ITEM_FRAMES.asBoolean()) {
             for (ItemFrame frame : world.getEntitiesByClass(ItemFrame.class)) {
-                applyColorIfRainbowArmor(frame.getItem(), color);
+                applyColorIfRainbowArmor(frame.getItem());
             }
         }
 
@@ -123,7 +117,7 @@ public class TaggedArmorAnimator extends BukkitRunnable {
                 EntityEquipment equipment = entity.getEquipment();
                 if (equipment != null) {
                     for (ItemStack armorPiece : equipment.getArmorContents()) {
-                        applyColorIfRainbowArmor(armorPiece, color);
+                        applyColorIfRainbowArmor(armorPiece);
                     }
                 }
             }
@@ -133,7 +127,7 @@ public class TaggedArmorAnimator extends BukkitRunnable {
     /**
      * Scans container blocks like chests, shulkers, barrels, etc., in all loaded chunks of a world.
      */
-    public void animateBlockInventories(World world, Color color) {
+    public void animateBlockInventories(World world) {
         if (!CHECK_BLOCK_INVENTORIES.asBoolean()) {
             return;
         }
@@ -141,7 +135,7 @@ public class TaggedArmorAnimator extends BukkitRunnable {
         for (Chunk chunk : world.getLoadedChunks()) {
             for (BlockState blockState : chunk.getTileEntities()) {
                 if (blockState instanceof Container container) {
-                    animateInventory(container.getInventory(), color);
+                    animateInventory(container.getInventory());
                 }
             }
         }
@@ -150,24 +144,43 @@ public class TaggedArmorAnimator extends BukkitRunnable {
     /**
      * Applies the animation color to all rainbow armor pieces in a given inventory.
      */
-    private void animateInventory(Inventory inventory, Color color) {
+    private void animateInventory(Inventory inventory) {
         for (ItemStack item : inventory.getContents()) {
-            applyColorIfRainbowArmor(item, color);
+            applyColorIfRainbowArmor(item);
         }
     }
 
     /**
      * Applies the animated color to the given item if it's recognized as rainbow armor.
      */
-    private void applyColorIfRainbowArmor(ItemStack item, Color color) {
+    private void applyColorIfRainbowArmor(ItemStack item) {
         if (item == null || !(item.getItemMeta() instanceof LeatherArmorMeta meta)) {
             return;
         }
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        if (container.has(tagKey)) {
-            meta.setColor(color);
-            item.setItemMeta(meta);
+        if (!container.has(ArmorPieceFactory.getArmorTagKey())) {
+            return; // Not a tagged armor piece
         }
+
+        int count;
+        int cycleSpeed;
+        try {
+            count = container.get(getColorCountKey(), PersistentDataType.INTEGER);
+            cycleSpeed = container.get(getCycleSpeedKey(), PersistentDataType.INTEGER);
+        } catch (NullPointerException | NumberFormatException e) {
+            Rainbow.logger.warning("Error retrieving color count or cycle speed: " + e.getMessage());
+            return;
+        }
+
+        meta.setColor(convertCountToRGB(count));
+
+        count += cycleSpeed;
+        if (count >= Integer.MAX_VALUE - THRESHOLD) {
+            count = 0;
+        }
+
+        container.set(getColorCountKey(), PersistentDataType.INTEGER, count);
+        item.setItemMeta(meta);
     }
 }
