@@ -3,7 +3,6 @@ package io.stealingdapenta.animator;
 import static io.stealingdapenta.ArmorPieceFactory.getColorCountKey;
 import static io.stealingdapenta.ArmorPieceFactory.getCycleSpeedKey;
 import static io.stealingdapenta.config.ConfigKey.CHECK_BLOCK_INVENTORIES;
-import static io.stealingdapenta.config.ConfigKey.CHECK_CURSOR_ITEMS;
 import static io.stealingdapenta.config.ConfigKey.CHECK_OPEN_INVENTORIES;
 import static io.stealingdapenta.config.ConfigKey.CHECK_PLAYER_INVENTORY;
 
@@ -55,11 +54,7 @@ public class TaggedArmorAnimator extends BukkitRunnable {
     public void animatePlayer(Player player) {
         for (ItemStack armorPiece : player.getInventory()
                                           .getArmorContents()) {
-            applyColorIfRainbowArmor(armorPiece);
-        }
-
-        if (CHECK_CURSOR_ITEMS.asBoolean()) {
-            applyColorIfRainbowArmor(player.getItemOnCursor());
+            applyColorIfRainbowArmor(armorPiece, player);
         }
 
         if (CHECK_PLAYER_INVENTORY.asBoolean()) {
@@ -98,16 +93,27 @@ public class TaggedArmorAnimator extends BukkitRunnable {
             return;
         }
         for (ItemStack item : inventory.getContents()) {
-            applyColorIfRainbowArmor(item);
+            applyColorIfRainbowArmor(item, (Player) inventory.getHolder());
         }
     }
 
     /**
      * Animates a single item if it is recognized as tagged rainbow armor.
+     * Optionally skips animation if the item is currently on the cursor of a given player (to avoid duplication glitches).
+     *
+     * @param item The item to potentially animate.
+     * @param excludedPlayers Players whose items potentially should not be updated (e.g., during open inventory interactions).
      */
-    private void applyColorIfRainbowArmor(ItemStack item) {
+    private void applyColorIfRainbowArmor(ItemStack item, Player... excludedPlayers) {
         if (item == null || !(item.getItemMeta() instanceof LeatherArmorMeta meta)) {
             return;
+        }
+
+        // Prevent updating items currently held on the cursor (avoids visual/duplication glitches)
+        for (Player player : excludedPlayers) {
+            if (item.equals(player.getItemOnCursor())) {
+                return; // Skip the item if it's held on the cursor to prevent any further animation updates
+            }
         }
 
         PersistentDataContainer container = meta.getPersistentDataContainer();

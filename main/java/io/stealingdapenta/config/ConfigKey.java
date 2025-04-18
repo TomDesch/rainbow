@@ -20,7 +20,6 @@ public enum ConfigKey {
     NOT_ENOUGH_EMPTY_SPACES_MESSAGE("not-enough-empty-spaces-message", "&(255,0,0)You must have 4 empty inventory slots in order to use rainbow armor."),
     ARMOR_REMOVED_MESSAGE("no-empty-spaces-message", "Your rainbow armor was removed!"),
     ARMOR_ITEM_FEATURE("armor-item-feature", true),
-    CHECK_CURSOR_ITEMS("check-cursor-items", false),
     CHECK_PLAYER_INVENTORY("check-player-inventory", true),
     CHECK_OPEN_INVENTORIES("check-open-inventories", false),
     CHECK_BLOCK_INVENTORIES("check-block-inventories", false);
