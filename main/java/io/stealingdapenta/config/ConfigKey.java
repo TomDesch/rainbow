@@ -68,7 +68,7 @@ public enum ConfigKey {
                       .getString(getKey());
     }
 
-    private int asInt() {
+    public int asInt() {
         return Rainbow.getInstance()
                       .getConfig()
                       .getInt(getKey());

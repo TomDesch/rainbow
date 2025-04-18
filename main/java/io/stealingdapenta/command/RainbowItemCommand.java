@@ -42,7 +42,7 @@ public class RainbowItemCommand implements CommandExecutor {
             return true;
         }
 
-        int cycleSpeed = ConfigKey.CYCLE_SPEED.getValue(); // Default
+        int cycleSpeed = ConfigKey.CYCLE_SPEED.asInt(); // Default
         if (args.length > 0) {
             try {
                 cycleSpeed = Integer.parseInt(args[0]);
