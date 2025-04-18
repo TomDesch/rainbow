@@ -33,7 +33,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * Scans all armor pieces across the server and animates those tagged as rainbow armor. Each piece stores its own animation state via PersistentDataContainer. Config options control where the scanner looks (cursor, mobs, item frames, etc).
+ * Scans all armor pieces across the server and animates those tagged as rainbow armor. Each piece stores its own animation state via PersistentDataContainer. Config options control where the scanner looks (cursor, mobs, item frames, etc.).
  */
 public class TaggedArmorAnimator extends BukkitRunnable {
 
@@ -170,14 +170,16 @@ public class TaggedArmorAnimator extends BukkitRunnable {
         int speed = container.getOrDefault(getCycleSpeedKey(), PersistentDataType.INTEGER, 5);
 
         meta.setColor(AnimatorUtil.convertCountToRGB(count));
-        item.setItemMeta(meta);
 
-        // Save updated state
+        // Save updated state BEFORE setting item meta
         count += speed;
         if (count >= Integer.MAX_VALUE - THRESHOLD) {
             count = 0;
         }
 
         container.set(getColorCountKey(), PersistentDataType.INTEGER, count);
+
+        // Now apply the changes
+        item.setItemMeta(meta);
     }
 }
