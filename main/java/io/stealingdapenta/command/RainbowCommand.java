@@ -4,6 +4,7 @@ import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
 import static io.stealingdapenta.config.ConfigKey.ARMOR_DISABLED_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.ARMOR_ENABLED_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.INVALID_CYCLE_SPEED_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.NO_EMPTY_SPACES_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
 import static io.stealingdapenta.config.PermissionNode.RAINBOW_USE;
@@ -52,6 +53,7 @@ public class RainbowCommand implements CommandExecutor {
                 boundArmorAnimator = new BoundArmorAnimator(player, Integer.parseInt(args[0]));
             } catch (NumberFormatException e) {
                 playersWearingRainbowArmor.remove(player.getName());
+                player.sendMessage(INVALID_CYCLE_SPEED_MESSAGE.getFormattedMessage());
                 return false;
             }
         } else {
