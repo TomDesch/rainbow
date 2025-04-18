@@ -1,4 +1,4 @@
-package io.stealingdapenta;
+package io.stealingdapenta.animator;
 
 import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;

@@ -6,7 +6,7 @@ import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
 import static io.stealingdapenta.config.PermissionNode.RAINBOW_ITEM_USE;
 
 import io.stealingdapenta.ArmorPieceFactory;
-import io.stealingdapenta.BoundArmorAnimator;
+import io.stealingdapenta.animator.BoundArmorAnimator;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

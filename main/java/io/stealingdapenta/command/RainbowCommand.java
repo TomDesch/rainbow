@@ -8,7 +8,7 @@ import static io.stealingdapenta.config.ConfigKey.NO_EMPTY_SPACES_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
 import static io.stealingdapenta.config.PermissionNode.RAINBOW_USE;
 
-import io.stealingdapenta.BoundArmorAnimator;
+import io.stealingdapenta.animator.BoundArmorAnimator;
 import io.stealingdapenta.rainbow.Rainbow;
 import java.util.Arrays;
 import java.util.Objects;

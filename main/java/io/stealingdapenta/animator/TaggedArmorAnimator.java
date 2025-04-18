@@ -1,5 +1,6 @@
-package io.stealingdapenta;
+package io.stealingdapenta.animator;
 
+import io.stealingdapenta.ArmorPieceFactory;
 import io.stealingdapenta.rainbow.Rainbow;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
