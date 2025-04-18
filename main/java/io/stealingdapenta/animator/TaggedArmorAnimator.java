@@ -1,5 +1,7 @@
 package io.stealingdapenta.animator;
 
+import static io.stealingdapenta.animator.AnimatorUtil.convertCountToRGB;
+
 import io.stealingdapenta.ArmorPieceFactory;
 import io.stealingdapenta.rainbow.Rainbow;
 import org.bukkit.Bukkit;
@@ -59,12 +61,5 @@ public class TaggedArmorAnimator extends BukkitRunnable {
 
         meta.setColor(color);
         item.setItemMeta(meta);
-    }
-
-    private Color convertCountToRGB(int count) {
-        int red = (int) (Math.sin(count * 0.01) * 127 + 128);
-        int green = (int) (Math.sin(count * 0.01 + 2) * 127 + 128);
-        int blue = (int) (Math.sin(count * 0.01 + 4) * 127 + 128);
-        return Color.fromRGB(red, green, blue);
     }
 }

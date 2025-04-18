@@ -2,6 +2,7 @@ package io.stealingdapenta.animator;
 
 import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
+import static io.stealingdapenta.animator.AnimatorUtil.convertCountToRGB;
 import static io.stealingdapenta.config.ConfigKey.CYCLE_SPEED;
 
 import java.util.function.Consumer;
@@ -67,12 +68,5 @@ public class BoundArmorAnimator extends BukkitRunnable {
         meta.setColor(armorColor);
         item.setItemMeta(meta);
         return item;
-    }
-
-    private Color convertCountToRGB(int count) {
-        int red = (int) (Math.sin(count * 0.01) * 127 + 128);
-        int green = (int) (Math.sin(count * 0.01 + 2) * 127 + 128);
-        int blue = (int) (Math.sin(count * 0.01 + 4) * 127 + 128);
-        return Color.fromRGB(red, green, blue);
     }
 }
