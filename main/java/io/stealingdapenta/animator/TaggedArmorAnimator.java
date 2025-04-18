@@ -12,6 +12,8 @@ import static io.stealingdapenta.config.ConfigKey.CHECK_OPEN_INVENTORIES;
 import static io.stealingdapenta.config.ConfigKey.CHECK_PLAYER_INVENTORY;
 
 import io.stealingdapenta.ArmorPieceFactory;
+import io.stealingdapenta.config.ConfigKey;
+import io.stealingdapenta.rainbow.Rainbow;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -39,6 +41,12 @@ public class TaggedArmorAnimator extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (!ConfigKey.ARMOR_ITEM_FEATURE.asBoolean()) {
+            Rainbow.logger.warning("Armor item feature not enabled, yet the animator is running!");
+            this.cancel();
+            return;
+        }
+
         // Player-scoped items
         for (Player player : Bukkit.getOnlinePlayers()) {
             animatePlayer(player);

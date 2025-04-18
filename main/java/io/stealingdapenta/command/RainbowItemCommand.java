@@ -27,6 +27,11 @@ public class RainbowItemCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String @NotNull [] args) {
+        if (!ConfigKey.ARMOR_ITEM_FEATURE.asBoolean()) {
+            sender.sendMessage(ConfigKey.FEATURE_DISABLED_MESSAGE.getFormattedMessage());
+            return true;
+        }
+
         if (!(sender instanceof Player player)) {
             sender.sendMessage(PLAYERS_ONLY_MESSAGE.getFormattedMessage());
             return true;
