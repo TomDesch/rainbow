@@ -29,7 +29,7 @@ armor-enabled-message: '&(75,255,75)Rainbow armor enabled.'
 armor-disabled-message: '&(249,255,68)Rainbow armor disabled.'
 
 # Sent when rainbow armor is forcibly removed.
-no-empty-spaces-message: Your rainbow armor was removed!
+no-empty-spaces-message: 'Your rainbow armor was removed!'
 
 # Sent when player tries to equip armor but lacks inventory space.
 not-enough-empty-spaces-message: '&(255,0,0)You must have 4 empty inventory slots in order to use rainbow armor.'
@@ -38,7 +38,7 @@ not-enough-empty-spaces-message: '&(255,0,0)You must have 4 empty inventory slot
 players-only-message: '&(255,0,0)This command can only be used by players.'
 
 # Sent when the cycle speed input is invalid.
-invalid-cycle-speed: §cInvalid cycle speed. Please enter a positive number.
+invalid-cycle-speed: '§cInvalid cycle speed. Please enter a positive number.'
 
 # Sent when a command is used while a feature is disabled in the config.
 feature-disabled-message: '&(249,255,68)This feature is disabled. Please contact the server administrator if this is an error.'
@@ -48,10 +48,10 @@ feature-disabled-message: '&(249,255,68)This feature is disabled. Please contact
 # ==========================================================
 
 # Example to guide users on how to format messages with RGB and styles.
-formatted-example-message: >
+formatted-example-message: '>
   To format your messages, use &(r,g,b) format, for example &(123,456,789) to set colors, 
   and mix it up with decorators like &b &o &u &i &s to make your text bold, obfuscated, 
-  underlined, italic or strikethrough :) Use &r to reset decorations.
+  underlined, italic or strikethrough :) Use &r to reset decorations.'
 
 # ==========================================================
 # 🧪 ARMOR DETECTION SCAN SETTINGS
