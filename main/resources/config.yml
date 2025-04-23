@@ -31,7 +31,7 @@ armor-disabled-message: '&(249,255,68)Rainbow armor disabled.'
 # Sent when rainbow armor is forcibly removed.
 no-empty-spaces-message: 'Your rainbow armor was removed!'
 
-# Sent when player tries to equip armor but lacks inventory space.
+# Sent when a player tries to equip armor but lacks inventory space.
 not-enough-empty-spaces-message: '&(255,0,0)You must have 4 empty inventory slots in order to use rainbow armor.'
 
 # Sent when someone uses a player-only command from console.
