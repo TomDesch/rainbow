@@ -41,8 +41,6 @@ The config allows you to fine-tune performance vs visual fidelity. Here's a summ
 - `armor-item-feature`: Whether `/rainbowitem` is enabled.
 - `check-block-inventories`, etc.: Toggle which inventories/entities to animate items in.
 
-> Note: Animating items in more places could potentially impact performance — use with caution!
-
 ## 👤 Author
 
 Plugin created by **StealingDaPenta**
