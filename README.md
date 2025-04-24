@@ -43,10 +43,6 @@ The config allows you to fine-tune performance vs visual fidelity. Here's a summ
 
 > Note: Animating items in more places could potentially impact performance — use with caution!
 
-## ⚠️ Known Issues
-
-- Spam-clicking animated items may cause **duplication glitches** of the rainbow armor piece.
-
 ## 👤 Author
 
 Plugin created by **StealingDaPenta**
