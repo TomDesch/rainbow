@@ -75,7 +75,7 @@ public class ArmorListener implements Listener {
                                    .getItemInMainHand();
         ItemStack cursorItem = player.getItemOnCursor();
 
-        if (isLeatherArmorItem(handItem) || isLeatherArmorItem(cursorItem)) {
+        if (isArmorItem(handItem) || isArmorItem(cursorItem)) {
             event.setCancelled(true);
         }
     }
@@ -111,20 +111,20 @@ public class ArmorListener implements Listener {
 
         // Block placing armor manually from the cursor into any inventory slot
         ItemStack cursor = event.getCursor();
-        if (isLeatherArmorItem(cursor)) {
+        if (isArmorItem(cursor)) {
             event.setCancelled(true);
             return;
         }
 
         // Block shift-clicking armor into the player inventory (where it could equip)
         ItemStack clickedItem = event.getCurrentItem();
-        if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && isLeatherArmorItem(clickedItem)) {
+        if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && isArmorItem(clickedItem)) {
             event.setCancelled(true);
             return;
         }
 
         // Prevent placing armor with drag-drop interaction
-        if (event.getAction() == InventoryAction.PLACE_ALL && isLeatherArmorItem(cursor)) {
+        if (event.getAction() == InventoryAction.PLACE_ALL && isArmorItem(cursor)) {
             event.setCancelled(true);
         }
 
@@ -137,18 +137,19 @@ public class ArmorListener implements Listener {
 
 
     /**
-     * Checks whether the given item is a piece of leather armor.
+     * Checks whether the given item is a piece of armor.
+     * All armor interactions are blocked if the player is wearing rainbow armor.
      *
      * @param item The item to check.
-     * @return True if the item is a leather helmet, chestplate, leggings, or boots; false otherwise.
+     * @return True if the item is a helmet, chestplate, leggings, or boots; false otherwise.
      */
-    private boolean isLeatherArmorItem(ItemStack item) {
+    private boolean isArmorItem(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) {
             return false;
         }
 
         String type = item.getType()
                           .name();
-        return type.endsWith("LEATHER_HELMET") || type.endsWith("LEATHER_CHESTPLATE") || type.endsWith("LEATHER_LEGGINGS") || type.endsWith("LEATHER_BOOTS");
+        return type.endsWith("HELMET") || type.endsWith("CHESTPLATE") || type.endsWith("LEGGINGS") || type.endsWith("BOOTS");
     }
 }
