@@ -5,29 +5,26 @@ import static io.stealingdapenta.config.ConfigKey.INVALID_CYCLE_SPEED_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.NOT_ENOUGH_EMPTY_SPACES_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.PLAYERS_ONLY_MESSAGE;
-import static io.stealingdapenta.config.PermissionNode.RAINBOW_ITEM_USE;
+import static io.stealingdapenta.config.PermissionNode.RAINBOW_HORSE_ARMOR;
 
 import io.stealingdapenta.ArmorPieceFactory;
 import io.stealingdapenta.config.ConfigKey;
-import org.bukkit.Material;
+import java.util.HashMap;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command that gives the executing player a set of tagged rainbow armor pieces. Usage: /rainbowitem [cycleSpeed]
+ * Command that gives the player a rainbow horse armor set. Usage: /rainbowhorseitem [cycleSpeed]
  */
-public class RainbowItemCommand implements CommandExecutor {
-
-    private static final int MINIMUM_FREE_SLOTS = 4;
+public class RainbowHorseItemCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String @NotNull [] args) {
-        if (!ConfigKey.ARMOR_ITEM_FEATURE.asBoolean()) {
+        if (!ConfigKey.CHECK_HORSES.asBoolean()) {
             sender.sendMessage(ConfigKey.FEATURE_DISABLED_MESSAGE.getFormattedMessage());
             return true;
         }
@@ -37,13 +34,8 @@ public class RainbowItemCommand implements CommandExecutor {
             return true;
         }
 
-        if (!player.hasPermission(RAINBOW_ITEM_USE.getNode())) {
+        if (!player.hasPermission(RAINBOW_HORSE_ARMOR.getNode())) {
             player.sendMessage(NO_PERMISSION_MESSAGE.getFormattedMessage());
-            return true;
-        }
-
-        if (!hasFreeSlots(player.getInventory())) {
-            player.sendMessage(NOT_ENOUGH_EMPTY_SPACES_MESSAGE.getFormattedMessage());
             return true;
         }
 
@@ -60,29 +52,16 @@ public class RainbowItemCommand implements CommandExecutor {
             }
         }
 
-        ItemStack[] armorSet = ArmorPieceFactory.ARMOR_PIECE_FACTORY.createArmorSet(cycleSpeed);
-        for (ItemStack piece : armorSet) {
-            player.getInventory()
-                  .addItem(piece);
+        ItemStack armorSet = ArmorPieceFactory.ARMOR_PIECE_FACTORY.createHorseArmor(cycleSpeed);
+        HashMap<Integer, ItemStack> leftover = player.getInventory()
+                                                     .addItem(armorSet);
+
+        if (!leftover.isEmpty()) { // This works here because we're only adding one item
+            player.sendMessage(NOT_ENOUGH_EMPTY_SPACES_MESSAGE.getFormattedMessage());
+            return true;
         }
 
         player.sendMessage(ARMOR_ADDED_MESSAGE.getFormattedMessage());
         return true;
-    }
-
-    /**
-     * Checks if a player's inventory has at least MINIMUM_FREE_SLOTS empty spaces (ignoring armor slots).
-     *
-     * @param inventory the inventory to check
-     * @return true if enough free slots exist, false otherwise
-     */
-    private boolean hasFreeSlots(PlayerInventory inventory) {
-        int freeSlots = 0;
-        for (ItemStack item : inventory.getStorageContents()) { // excludes armor + offhand
-            if (item == null || item.getType() == Material.AIR) {
-                freeSlots++;
-            }
-        }
-        return freeSlots >= MINIMUM_FREE_SLOTS;
     }
 }

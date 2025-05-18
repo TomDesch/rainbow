@@ -27,6 +27,7 @@ plugin-reloaded-message: '&(75,255,75)Rainbow armor plugin reloaded.'
 # Sent when a player enables or disables rainbow armor.
 armor-enabled-message: '&(75,255,75)Rainbow armor enabled.'
 armor-disabled-message: '&(249,255,68)Rainbow armor disabled.'
+armor-added-message: '&(75,255,75)Rainbow armor added to your inventory.'
 
 # Sent when rainbow armor is forcibly removed.
 no-empty-spaces-message: 'Your rainbow armor was removed!'

@@ -34,6 +34,14 @@ public enum ArmorPieceFactory {
     }
 
     /**
+     * @param cycleSpeed The animation cycle speed to tag into the horse armor.
+     * @return A leather horse armor piece tagged as rainbow armor.
+     */
+    public ItemStack createHorseArmor(int cycleSpeed) {
+        return createArmorPiece(Material.LEATHER_HORSE_ARMOR, cycleSpeed);
+    }
+
+    /**
      * Checks if the given item is a rainbow armor piece by checking its persistent tags.
      *
      * @param itemStack The item to check.
@@ -46,21 +54,6 @@ public enum ArmorPieceFactory {
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
         return container.has(getArmorTagKey(), PersistentDataType.BYTE);
-    }
-
-    /**
-     * Gets the cycle speed value embedded into a rainbow armor piece, or -1 if not found.
-     *
-     * @param itemStack The tagged rainbow armor item.
-     * @return The configured cycle speed, or -1 if missing or invalid.
-     */
-    public int getCycleSpeed(ItemStack itemStack) {
-        if (itemStack == null || !(itemStack.getItemMeta() instanceof LeatherArmorMeta meta)) {
-            return -1;
-        }
-
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        return container.getOrDefault(getCycleSpeedKey(), PersistentDataType.INTEGER, -1);
     }
 
     /**

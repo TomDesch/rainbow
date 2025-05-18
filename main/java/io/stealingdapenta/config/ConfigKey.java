@@ -13,6 +13,7 @@ public enum ConfigKey {
     NO_PERMISSION_MESSAGE("no-permission-message", "&(255,0,0)You don't have permission to use this command."),
     PLAYERS_ONLY_MESSAGE("players-only-message", "&(255,0,0)This command can only be used by players."),
     INVALID_CYCLE_SPEED_MESSAGE("invalid-cycle-speed", "§cInvalid cycle speed. Please enter a positive number."),
+    ARMOR_ADDED_MESSAGE("armor-added-message", "&(75,255,75)Rainbow armor added to your inventory."),
     ARMOR_ENABLED_MESSAGE("armor-enabled-message", "&(75,255,75)Rainbow armor enabled."),
     ARMOR_DISABLED_MESSAGE("armor-disabled-message", "&(249,255,68)Rainbow armor disabled."),
     FEATURE_DISABLED_MESSAGE("feature-disabled-message", "&(249,255,68)This feature is disabled. Please contact the server administrator if this is an error."),
