@@ -15,6 +15,9 @@ commands:
   rainbowitem:
     description: Gives a rainbow armor set with optional animation speed
     usage: /rainbowitem [optional cycleSpeed]
+  rainbowhorseitem:
+    description: Gives a rainbow horse armor set with optional animation speed
+    usage: /rainbowhorseitem [optional cycleSpeed]
 
 permissions:
   rainbow.use:
@@ -25,4 +28,7 @@ permissions:
     default: op
   rainbow.item:
     description: Allow usage of /rainbowitem
+    default: op
+  rainbow.horse:
+    description: Allow usage of /rainbowhorseitem
     default: op

@@ -1,6 +1,6 @@
 # ==========================================================
 # 🌈 Rainbow Armor Plugin Configuration
-# Version: 3.1.1
+# Version: 3.2.0
 # Author: StealingDaPenta
 # ==========================================================
 
@@ -65,3 +65,7 @@ check-player-inventory: true
 # Whether to animate armor stored inside chests, barrels, shulkers, etc.
 # Keep this disabled if you want to be able to rename items in anvil.
 check-block-inventories: false
+
+# Whether to animate rainbow armor on horses.
+check-horse-armor: true
+

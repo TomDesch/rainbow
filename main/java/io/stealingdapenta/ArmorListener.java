@@ -1,6 +1,7 @@
 package io.stealingdapenta;
 
 import static io.stealingdapenta.config.ConfigKey.ARMOR_REMOVED_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.CHECK_HORSES;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
 
 public class ArmorListener implements Listener {
 
@@ -141,7 +143,7 @@ public class ArmorListener implements Listener {
      * All armor interactions are blocked if the player is wearing rainbow armor.
      *
      * @param item The item to check.
-     * @return True if the item is a helmet, chestplate, leggings, or boots; false otherwise.
+     * @return True if the item is a helmet, chestplate, leggings, or boots, or potential horse armor; false otherwise.
      */
     private boolean isArmorItem(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) {
@@ -150,6 +152,22 @@ public class ArmorListener implements Listener {
 
         String type = item.getType()
                           .name();
-        return type.endsWith("HELMET") || type.endsWith("CHESTPLATE") || type.endsWith("LEGGINGS") || type.endsWith("BOOTS");
+        return type.endsWith("HELMET") || type.endsWith("CHESTPLATE") || type.endsWith("LEGGINGS") || type.endsWith("BOOTS") || isLeatherHorseArmor(item);
+    }
+
+    /**
+     * Checks whether the given item is leather horse armor. Will default to false if the feature is disabled in the config.
+     *
+     * @param item the item to check
+     * @return true if the item is leather horse armor, false otherwise or false if the feature is disabled
+     */
+    private boolean isLeatherHorseArmor(@NotNull ItemStack item) {
+        if (!CHECK_HORSES.asBoolean()) {
+            return false;
+        }
+
+        String type = item.getType()
+                          .name();
+        return type.contains("LEATHER_HORSE_ARMOR");
     }
 }
