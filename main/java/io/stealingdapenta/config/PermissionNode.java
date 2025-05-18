@@ -3,7 +3,9 @@ package io.stealingdapenta.config;
 public enum PermissionNode {
     RAINBOW_RELOAD("rainbow.reload"),
     RAINBOW_USE("rainbow.use"),
-    RAINBOW_ITEM_USE("rainbow.item.use"); // todo register me
+    RAINBOW_ITEM_USE("rainbow.item"),
+    RAINBOW_HORSE_ARMOR("rainbow.horse"),
+    ;
 
     private final String node;
 
