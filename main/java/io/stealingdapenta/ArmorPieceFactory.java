@@ -41,6 +41,10 @@ public enum ArmorPieceFactory {
         return createArmorPiece(Material.LEATHER_HORSE_ARMOR, cycleSpeed);
     }
 
+    public ItemStack createWolfArmor(int cycleSpeed) {
+        return createArmorPiece(Material.WOLF_ARMOR, cycleSpeed);
+    }
+
     /**
      * Checks if the given item is a rainbow armor piece by checking its persistent tags.
      *

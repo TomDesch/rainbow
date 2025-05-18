@@ -6,16 +6,20 @@ import static io.stealingdapenta.ArmorPieceFactory.getCycleSpeedKey;
 import static io.stealingdapenta.config.ConfigKey.CHECK_BLOCK_INVENTORIES;
 import static io.stealingdapenta.config.ConfigKey.CHECK_HORSES;
 import static io.stealingdapenta.config.ConfigKey.CHECK_PLAYER_INVENTORY;
+import static io.stealingdapenta.config.ConfigKey.CHECK_WOLVES;
 
 import io.stealingdapenta.ArmorPieceFactory;
 import io.stealingdapenta.config.ConfigKey;
 import io.stealingdapenta.rainbow.Rainbow;
+import java.util.Arrays;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -56,17 +60,42 @@ public class TaggedArmorAnimator extends BukkitRunnable {
             if (CHECK_HORSES.asBoolean()) {
                 animateHorses(world);
             }
+
+            if (CHECK_WOLVES.asBoolean()) {
+                animateWolves(world);
+            }
         }
     }
 
     private void animateHorses(World world) {
-        for (org.bukkit.entity.Horse horse : world.getEntitiesByClass(org.bukkit.entity.Horse.class)) {
+        for (Horse horse : world.getEntitiesByClass(Horse.class)) {
             ItemStack armor = horse.getInventory()
                                    .getArmor();
 
             Player owner = null;
             if (horse.getOwner() instanceof Player) {
                 owner = (Player) horse.getOwner();
+            }
+            applyColorIfRainbowArmor(armor, owner);
+        }
+    }
+
+    private void animateWolves(World world) {
+        for (Wolf wolf : world.getEntitiesByClass(Wolf.class)) {
+            ItemStack armor = Arrays.stream(wolf.getEquipment()
+                                                .getArmorContents())
+                                    .findFirst()
+                                    .orElse(null);
+
+            // FIXME this doesnt WORK because Spigot API currently doesnt support getting the armor of a wolf
+
+            if (armor == null) {
+                continue;
+            }
+
+            Player owner = null;
+            if (wolf.getOwner() instanceof Player) {
+                owner = (Player) wolf.getOwner();
             }
             applyColorIfRainbowArmor(armor, owner);
         }

@@ -1,6 +1,6 @@
 # ==========================================================
 # 🌈 Rainbow Armor Plugin Configuration
-# Version: 3.2.0
+# Version: 3.3.0
 # Author: StealingDaPenta
 # ==========================================================
 
@@ -69,4 +69,7 @@ check-block-inventories: false
 
 # Whether to animate rainbow armor on horses.
 check-horse-armor: true
+
+# Whether to animate rainbow armor on wolves / dogs.
+check-wolf-armor: true
 

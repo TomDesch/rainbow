@@ -9,6 +9,7 @@ import io.stealingdapenta.animator.TaggedArmorAnimator;
 import io.stealingdapenta.command.RainbowCommand;
 import io.stealingdapenta.command.RainbowHorseItemCommand;
 import io.stealingdapenta.command.RainbowItemCommand;
+import io.stealingdapenta.command.RainbowWolfItemCommand;
 import io.stealingdapenta.config.ConfigKey;
 import java.util.Arrays;
 import java.util.Objects;
@@ -34,6 +35,7 @@ public class Rainbow extends JavaPlugin {
     private final RainbowReloadCommand reloadCommand = new RainbowReloadCommand();
     private final RainbowItemCommand rainbowItemCommand = new RainbowItemCommand();
     private final RainbowHorseItemCommand rainbowHorseItemCommand = new RainbowHorseItemCommand();
+    private final RainbowWolfItemCommand rainbowWolfItemCommand = new RainbowWolfItemCommand();
 
     private BukkitTask armorAnimatorTask;
 
@@ -51,6 +53,7 @@ public class Rainbow extends JavaPlugin {
         registerCommand("rainbowreload", reloadCommand);
         registerCommand("rainbowitem", rainbowItemCommand);
         registerCommand("rainbowhorseitem", rainbowHorseItemCommand);
+        registerCommand("rainbowwolfitem", rainbowWolfItemCommand);
 
         startItemBoundArmorAnimator();
 

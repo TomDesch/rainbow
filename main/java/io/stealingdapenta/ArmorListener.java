@@ -143,7 +143,7 @@ public class ArmorListener implements Listener {
      * All armor interactions are blocked if the player is wearing rainbow armor.
      *
      * @param item The item to check.
-     * @return True if the item is a helmet, chestplate, leggings, or boots, or potential horse armor; false otherwise.
+     * @return True if the item is a helmet, chestplate, leggings, or boots, or potential horse/wolf armor; false otherwise.
      */
     private boolean isArmorItem(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) {
@@ -152,13 +152,13 @@ public class ArmorListener implements Listener {
 
         String type = item.getType()
                           .name();
-        return type.endsWith("HELMET") || type.endsWith("CHESTPLATE") || type.endsWith("LEGGINGS") || type.endsWith("BOOTS") || isLeatherHorseArmor(item);
+        return type.endsWith("HELMET") || type.endsWith("CHESTPLATE") || type.endsWith("LEGGINGS") || type.endsWith("BOOTS") || isLeatherHorseArmor(item) || isWolfArmor(item);
     }
 
     /**
      * Checks whether the given item is leather horse armor. Will default to false if the feature is disabled in the config.
      *
-     * @param item the item to check
+     * @param item The item to check
      * @return true if the item is leather horse armor, false otherwise or false if the feature is disabled
      */
     private boolean isLeatherHorseArmor(@NotNull ItemStack item) {
@@ -169,5 +169,15 @@ public class ArmorListener implements Listener {
         String type = item.getType()
                           .name();
         return type.contains("LEATHER_HORSE_ARMOR");
+    }
+
+    /**
+     * @param item The item to check.
+     * @return True if the item is wolf armor, false otherwise.
+     */
+    private boolean isWolfArmor(@NotNull ItemStack item) {
+        String type = item.getType()
+                          .name();
+        return type.contains("WOLF_ARMOR");
     }
 }

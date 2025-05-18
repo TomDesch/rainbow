@@ -5,7 +5,7 @@ public enum PermissionNode {
     RAINBOW_USE("rainbow.use"),
     RAINBOW_ITEM_USE("rainbow.item"),
     RAINBOW_HORSE_ARMOR("rainbow.horse"),
-    ;
+    RAINBOW_WOLF_ARMOR("rainbow.wolf");
 
     private final String node;
 

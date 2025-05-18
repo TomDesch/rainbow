@@ -23,7 +23,8 @@ public enum ConfigKey {
     ARMOR_ITEM_FEATURE("armor-item-feature", true),
     CHECK_PLAYER_INVENTORY("check-player-inventory", true),
     CHECK_BLOCK_INVENTORIES("check-block-inventories", false),
-    CHECK_HORSES("check-horse-armor", true);
+    CHECK_HORSES("check-horse-armor", true),
+    CHECK_WOLVES("check-wolf-armor", true);
 
 
     private final String key;
