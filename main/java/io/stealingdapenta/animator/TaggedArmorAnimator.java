@@ -4,6 +4,7 @@ import static io.stealingdapenta.ArmorPieceFactory.ARMOR_PIECE_FACTORY;
 import static io.stealingdapenta.ArmorPieceFactory.getColorCountKey;
 import static io.stealingdapenta.ArmorPieceFactory.getCycleSpeedKey;
 import static io.stealingdapenta.config.ConfigKey.CHECK_BLOCK_INVENTORIES;
+import static io.stealingdapenta.config.ConfigKey.CHECK_HORSES;
 import static io.stealingdapenta.config.ConfigKey.CHECK_PLAYER_INVENTORY;
 
 import io.stealingdapenta.ArmorPieceFactory;
@@ -22,6 +23,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Scans all armor pieces across the server and animates those tagged as rainbow armor. Each piece stores its own animation state via PersistentDataContainer. Config options control where the scanner looks (cursor, mobs, item frames, etc.).
@@ -47,10 +49,29 @@ public class TaggedArmorAnimator extends BukkitRunnable {
         if (!CHECK_BLOCK_INVENTORIES.asBoolean()) {
             return;
         }
+
         for (World world : Bukkit.getWorlds()) {
             animateBlockInventories(world);
+
+            if (CHECK_HORSES.asBoolean()) {
+                animateHorses(world);
+            }
         }
     }
+
+    private void animateHorses(World world) {
+        for (org.bukkit.entity.Horse horse : world.getEntitiesByClass(org.bukkit.entity.Horse.class)) {
+            ItemStack armor = horse.getInventory()
+                                   .getArmor();
+
+            Player owner = null;
+            if (horse.getOwner() instanceof Player) {
+                owner = (Player) horse.getOwner();
+            }
+            applyColorIfRainbowArmor(armor, owner);
+        }
+    }
+
 
     /**
      * Updates all rainbow armor related to a specific player, based on enabled config options.
@@ -105,13 +126,13 @@ public class TaggedArmorAnimator extends BukkitRunnable {
      * @param item           The item to potentially animate.
      * @param excludedPlayer Players whose items potentially should not be updated (e.g., during open inventory interactions).
      */
-    private void applyColorIfRainbowArmor(ItemStack item, Player excludedPlayer) {
+    private void applyColorIfRainbowArmor(@Nullable ItemStack item, @Nullable Player excludedPlayer) {
         if (!ARMOR_PIECE_FACTORY.isRainbowArmorPiece(item) || !(item.getItemMeta() instanceof LeatherArmorMeta meta)) {
             return;
         }
 
         // Prevent updating items currently held on the cursor (avoids visual/duplication glitches)
-        if (ARMOR_PIECE_FACTORY.isRainbowArmorPiece(excludedPlayer.getItemOnCursor())) {
+        if (excludedPlayer != null && ARMOR_PIECE_FACTORY.isRainbowArmorPiece(excludedPlayer.getItemOnCursor())) {
             return; // Skip the item if it's held on the cursor to prevent any further animation updates
         }
 
