@@ -45,13 +45,11 @@ public class TaggedArmorAnimator extends BukkitRunnable {
             animatePlayer(player);
         }
 
-        // World-scoped items
-        if (!CHECK_BLOCK_INVENTORIES.asBoolean()) {
-            return;
-        }
-
         for (World world : Bukkit.getWorlds()) {
-            animateBlockInventories(world);
+            // World-scoped items
+            if (CHECK_BLOCK_INVENTORIES.asBoolean()) {
+                animateBlockInventories(world);
+            }
 
             if (CHECK_HORSES.asBoolean()) {
                 animateHorses(world);
