@@ -5,6 +5,7 @@ import static io.stealingdapenta.config.ConfigKey.CHECK_HORSES;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,7 +39,7 @@ public class ArmorListener implements Listener {
 
         if (playersWearingRainbowArmor.remove(player.getName())) {
             player.getInventory()
-                  .setArmorContents(AIR_ARMOR);
+                    .setArmorContents(AIR_ARMOR);
         }
     }
 
@@ -56,7 +57,7 @@ public class ArmorListener implements Listener {
 
             PlayerInventory inv = player.getInventory();
             event.getDrops()
-                 .removeAll(Arrays.asList(inv.getHelmet(), inv.getChestplate(), inv.getLeggings(), inv.getBoots()));
+                    .removeAll(Arrays.asList(inv.getHelmet(), inv.getChestplate(), inv.getLeggings(), inv.getBoots()));
         }
     }
 
@@ -74,7 +75,7 @@ public class ArmorListener implements Listener {
         }
 
         ItemStack handItem = player.getInventory()
-                                   .getItemInMainHand();
+                .getItemInMainHand();
         ItemStack cursorItem = player.getItemOnCursor();
 
         if (isArmorItem(handItem) || isArmorItem(cursorItem)) {
@@ -120,6 +121,12 @@ public class ArmorListener implements Listener {
 
         // Block shift-clicking armor into the player inventory (where it could equip)
         ItemStack clickedItem = event.getCurrentItem();
+
+        if (isArmorItem(clickedItem)) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && isArmorItem(clickedItem)) {
             event.setCancelled(true);
             return;
@@ -132,42 +139,20 @@ public class ArmorListener implements Listener {
 
         // Block number key hot bar swaps
         if (event.getClick()
-                 .isKeyboardClick()) {
+                .isKeyboardClick()) {
             event.setCancelled(true);
         }
     }
 
 
     /**
-     * Checks whether the given item is a piece of armor.
-     * All armor interactions are blocked if the player is wearing rainbow armor.
+     * Checks whether the given item is a piece of rainbow armor.
      *
      * @param item The item to check.
-     * @return True if the item is a helmet, chestplate, leggings, or boots, or potential horse armor; false otherwise.
+     * @return True if the item is a piece of rainbow armor, false otherwise.
      */
     private boolean isArmorItem(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
-        }
-
-        String type = item.getType()
-                          .name();
-        return type.endsWith("HELMET") || type.endsWith("CHESTPLATE") || type.endsWith("LEGGINGS") || type.endsWith("BOOTS") || isLeatherHorseArmor(item);
+        return ArmorPieceFactory.ARMOR_PIECE_FACTORY.isRainbowArmorPiece(item);
     }
 
-    /**
-     * Checks whether the given item is leather horse armor. Will default to false if the feature is disabled in the config.
-     *
-     * @param item the item to check
-     * @return true if the item is leather horse armor, false otherwise or false if the feature is disabled
-     */
-    private boolean isLeatherHorseArmor(@NotNull ItemStack item) {
-        if (!CHECK_HORSES.asBoolean()) {
-            return false;
-        }
-
-        String type = item.getType()
-                          .name();
-        return type.contains("LEATHER_HORSE_ARMOR");
-    }
 }
