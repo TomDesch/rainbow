@@ -1,6 +1,6 @@
 # ==========================================================
 # 🌈 Rainbow Armor Plugin Configuration
-# Version: 3.2.1
+# Version: 3.3.0
 # Author: StealingDaPenta
 # ==========================================================
 
@@ -31,6 +31,9 @@ armor-added-message: '&(75,255,75)Rainbow armor added to your inventory.'
 
 # Sent when rainbow armor is forcibly removed.
 no-empty-spaces-message: 'Your rainbow armor was removed!'
+
+# Sent when a player tries to shift-click armor while wearing rainbow armor.
+armor-shift-click-blocked-message: '&(255,150,0)You can''t equip armor while wearing rainbow armor!'
 
 # Sent when a player tries to equip armor but lacks inventory space.
 not-enough-empty-spaces-message: '&(255,0,0)You must have 4 empty inventory slots in order to use rainbow armor.'

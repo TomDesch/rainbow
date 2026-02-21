@@ -1,10 +1,13 @@
 package io.stealingdapenta;
 
 import static io.stealingdapenta.config.ConfigKey.ARMOR_REMOVED_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.ARMOR_SHIFT_CLICK_BLOCKED_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.CHECK_HORSES;
+import static io.stealingdapenta.rainbow.Rainbow.logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -26,6 +30,15 @@ public class ArmorListener implements Listener {
 
     public static final ItemStack AIR_ITEM = new ItemStack(Material.AIR);
     public static final ItemStack[] AIR_ARMOR = {AIR_ITEM, AIR_ITEM, AIR_ITEM, AIR_ITEM};
+
+    // Raw slot indices for armor slots in the player inventory crafting view.
+    // In Paper 1.21 the player inventory raw slots are: 5=helmet, 6=chestplate, 7=leggings, 8=boots.
+    // NOTE: raw slots 36-39 are the HOTBAR, not armor — do NOT include them here.
+    private static final Set<Integer> ARMOR_RAW_SLOTS = Set.of(5, 6, 7, 8);
+
+    private boolean isArmorSlot(InventoryClickEvent event) {
+        return event.getSlotType() == SlotType.ARMOR || ARMOR_RAW_SLOTS.contains(event.getRawSlot());
+    }
 
     /**
      * Listener for when a player leaves the server. If the player is wearing rainbow armor, it is removed to prevent it from persisting.
@@ -61,7 +74,12 @@ public class ArmorListener implements Listener {
     }
 
     /**
-     * Listener for when a player interacts (e.g., right-clicks). If the player is wearing rainbow armor, prevent them from equipping new armor via right-click from either hand or cursor.
+     * Listener for when a player interacts (e.g., right-clicks).
+     * If the player is wearing rainbow armor, prevent them from right-click-equipping <em>any</em>
+     * armor piece from their hand or cursor.
+     * Right-clicking an armor piece auto-equips it into the
+     * armor slot, which would swap out (and destroy) the rainbow piece.
+     * Non-armor items are unaffected.
      *
      * @param event The interaction event triggered when a player right- or left-clicks.
      */
@@ -77,8 +95,10 @@ public class ArmorListener implements Listener {
                                    .getItemInMainHand();
         ItemStack cursorItem = player.getItemOnCursor();
 
+        // Block right-click equip for ANY armor piece — equipping any armor swaps out the rainbow piece
         if (isArmorItem(handItem) || isArmorItem(cursorItem)) {
             event.setCancelled(true);
+            player.sendMessage(ARMOR_SHIFT_CLICK_BLOCKED_MESSAGE.getFormattedMessage());
         }
     }
 
@@ -86,13 +106,15 @@ public class ArmorListener implements Listener {
     /**
      * Listener for when a player clicks inside any inventory.
      * <p>
-     * If the player is wearing rainbow armor, this prevents all possible ways to remove or replace armor, including:
+     * While wearing rainbow armor, the following rules apply:
      * <ul>
-     *   <li>Clicking or picking up items from armor slots</li>
-     *   <li>Shift-clicking armor to auto-equip</li>
-     *   <li>Placing armor from the cursor</li>
-     *   <li>Dragging and dropping armor</li>
-     *   <li>Using number keys to swap hot bar items into armor slots</li>
+     *   <li><b>Armor slots are fully locked</b> — nothing may be picked up from or placed into them,
+     *       preventing both duplication and destruction of the rainbow pieces.</li>
+     *   <li><b>Shift-clicking any armor item is blocked</b> — Minecraft always routes it to the
+     *       nearest matching armor slot, which would overwrite the rainbow piece.</li>
+     *   <li><b>Hot bar number-key swaps involving armor are blocked</b> — same overwrite risk.</li>
+     *   <li><b>Everything else is allowed</b> — picking up, placing, or moving non-armor items
+     *       between any slots (bag, chest, hot bar) is completely safe.</li>
      * </ul>
      *
      * @param event The inventory click event triggered by any click in an inventory.
@@ -105,45 +127,89 @@ public class ArmorListener implements Listener {
             return;
         }
 
-        // Block all direct interaction with armor slots (pickup, place, drag, etc.)
-        if (event.getSlotType() == SlotType.ARMOR) {
+        logger.fine("[DEBUG CLICK] player=" + player.getName() + " slotType=" + event.getSlotType() + " rawSlot=" + event.getRawSlot() + " slot=" + event.getSlot() + " action=" + event.getAction() + " click=" + event.getClick() + " item=" + (
+                event.getCurrentItem() != null ? event.getCurrentItem()
+                                                      .getType() : "null") + " cursor=" + event.getCursor()
+                                                                                               .getType());
+
+        // BLOCK: armor slots are fully locked — picking up or placing anything here would dupe or destroy the rainbow piece.
+        if (isArmorSlot(event)) {
             event.setCancelled(true);
+            player.updateInventory();
             return;
         }
 
-        // Block placing armor manually from the cursor into any inventory slot
-        ItemStack cursor = event.getCursor();
-        if (isArmorItem(cursor)) {
-            event.setCancelled(true);
-            return;
-        }
-
-        // Block shift-clicking armor into the player inventory (where it could equip)
+        // BLOCK: shift-clicking any armor item always auto-equips it, which would overwrite a rainbow slot.
+        // Explicitly restore the item so creative mode doesn't consume it on cancel.
         ItemStack clickedItem = event.getCurrentItem();
         if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && isArmorItem(clickedItem)) {
             event.setCancelled(true);
+            if (event.getClickedInventory() != null) {
+                event.getClickedInventory()
+                     .setItem(event.getSlot(), clickedItem);
+            }
+            player.updateInventory();
+            player.sendMessage(ARMOR_SHIFT_CLICK_BLOCKED_MESSAGE.getFormattedMessage());
             return;
         }
 
-        // Prevent placing armor with drag-drop interaction
-        if (event.getAction() == InventoryAction.PLACE_ALL && isArmorItem(cursor)) {
-            event.setCancelled(true);
-        }
-
-        // Block number key hot bar swaps
+        // BLOCK: hot bar number-key swap where either side is armor — would equip or displace a rainbow slot.
+        // ALLOW: hot bar swaps where neither side is armor — safe to move freely.
         if (event.getClick()
                  .isKeyboardClick()) {
-            event.setCancelled(true);
+            int hotbarButton = event.getHotbarButton();
+            if (hotbarButton >= 0) {
+                ItemStack hotbarItem = player.getInventory()
+                                             .getItem(hotbarButton);
+                if (isArmorItem(clickedItem) || isArmorItem(hotbarItem)) {
+                    event.setCancelled(true);
+                    player.updateInventory();
+                }
+            }
+        }
+
+        // ALLOW (implicit): all other clicks — picking up, placing, and moving non-armor items anywhere is safe.
+    }
+
+    /**
+     * Listener for inventory drag events.
+     * <p>
+     * While wearing rainbow armor, dragging onto an armor slot is blocked — it would overwrite the rainbow piece. Dragging armor or non-armor items onto any other slot is freely allowed.
+     *
+     * @param event The inventory drag event.
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void inventoryDrag(InventoryDragEvent event) {
+        if (!(event.getWhoClicked() instanceof Player player)) {
+            return;
+        }
+
+        if (!playersWearingRainbowArmor.contains(player.getName())) {
+            return;
+        }
+
+        logger.fine("[DEBUG DRAG] player=" + player.getName() + " rawSlots=" + event.getRawSlots() + " item=" + event.getOldCursor()
+                                                                                                                     .getType());
+
+        // BLOCK: dragging onto an armor slot would overwrite the rainbow piece in that slot.
+        // ALLOW (implicit): dragging onto any non-armor slot is safe regardless of item type.
+        for (int rawSlot : event.getRawSlots()) {
+            if (event.getView()
+                     .getSlotType(rawSlot) == SlotType.ARMOR || ARMOR_RAW_SLOTS.contains(rawSlot)) {
+                event.setCancelled(true);
+                player.updateInventory();
+                return;
+            }
         }
     }
 
 
+
     /**
      * Checks whether the given item is a piece of armor.
-     * All armor interactions are blocked if the player is wearing rainbow armor.
      *
      * @param item The item to check.
-     * @return True if the item is a helmet, chestplate, leggings, or boots, or potential horse armor; false otherwise.
+     * @return True if the item is a helmet, chestplate, leggings, boots, or leather horse armor; false otherwise.
      */
     private boolean isArmorItem(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) {

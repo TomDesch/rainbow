@@ -36,6 +36,21 @@ A stylish Spigot plugin for Minecraft 1.21+ that gives players **color-cycling l
 | `rainbow.item`   | Allow use of `/rainbowitem`      |
 | `rainbow.horse`  | Allow use of `/rainbowhorseitem` |
 
+## 🛡️ Armor Interaction Restrictions
+
+While wearing rainbow armor, certain inventory interactions are intentionally restricted to prevent item duplication or destruction of the animated pieces:
+
+| Action                                                     | Allowed? | Reason                                                                            |
+|------------------------------------------------------------|----------|-----------------------------------------------------------------------------------|
+| Move non-armor items freely (bag ↔ bag, bag ↔ chest, etc.) | ✅ Yes    | Safe — unrelated to rainbow slots                                                 |
+| Pick up / place armor pieces in bag or chest by clicking   | ✅ Yes    | Safe — armor slots are not involved                                               |
+| Drag armor pieces onto bag or chest slots                  | ✅ Yes    | Safe — armor slots are not involved                                               |
+| Click directly on an armor slot                            | ❌ No     | Would pick up the rainbow piece, causing duplication via the animator             |
+| Drag anything onto an armor slot                           | ❌ No     | Would overwrite and destroy the rainbow piece in that slot                        |
+| Shift-click any armor item                                 | ❌ No     | Minecraft auto-routes it to the nearest armor slot, overwriting the rainbow piece |
+| Right-click-equip armor from hand                          | ❌ No     | Auto-equips directly into the armor slot, overwriting the rainbow piece           |
+| Hotbar number-key swap involving armor                     | ❌ No     | Would swap an armor piece into or out of the rainbow slot                         |
+
 ## 🛠 Configuration
 
 The config allows you to fine-tune performance vs. visual fidelity. Here's a summary:
