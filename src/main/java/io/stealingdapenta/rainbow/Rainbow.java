@@ -63,7 +63,7 @@ public class Rainbow extends JavaPlugin {
                 armorAnimatorTask.cancel();
             }
             logger.info("Rainbow item feature is enabled in the config. Starting the animator.");
-            armorAnimatorTask = new TaggedArmorAnimator().runTaskTimer(this, 0, 1L);
+            armorAnimatorTask = new TaggedArmorAnimator().runTaskTimer(this, 0, TaggedArmorAnimator.TICK_PERIOD);
         } else {
             logger.info("Rainbow item feature is disabled in the config. If you believe this is a mistake, please check the config.yml file.");
         }

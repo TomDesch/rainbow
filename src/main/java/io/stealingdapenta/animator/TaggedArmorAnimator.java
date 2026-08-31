@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TaggedArmorAnimator extends BukkitRunnable {
 
+    public static final long TICK_PERIOD = 5L;
     private static final int THRESHOLD = 5000;
 
     @Override
@@ -145,14 +146,16 @@ public class TaggedArmorAnimator extends BukkitRunnable {
         meta.setColor(AnimatorUtil.convertCountToRGB(count));
 
         // Save updated state BEFORE setting item meta
-        count += speed;
-        if (count >= Integer.MAX_VALUE - THRESHOLD) {
-            count = 0;
-        }
+        count = advanceColorCount(count, speed);
 
         container.set(getColorCountKey(), PersistentDataType.INTEGER, count);
 
         // Now apply the changes
         item.setItemMeta(meta);
+    }
+
+    static int advanceColorCount(int count, int speed) {
+        long nextCount = count + speed * TICK_PERIOD;
+        return nextCount >= Integer.MAX_VALUE - THRESHOLD ? 0 : (int) nextCount;
     }
 }
