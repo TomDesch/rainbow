@@ -51,21 +51,30 @@ public enum ConfigKey {
     }
 
     private String asString() {
-        return Rainbow.getInstance()
-                      .getConfig()
-                      .getString(getKey());
+        Rainbow plugin = Rainbow.getInstance();
+        if (plugin == null) {
+            return String.valueOf(defaultValue);
+        }
+        return plugin.getConfig()
+                     .getString(getKey(), String.valueOf(defaultValue));
     }
 
     public int asInt() {
-        return Rainbow.getInstance()
-                      .getConfig()
-                      .getInt(getKey());
+        Rainbow plugin = Rainbow.getInstance();
+        if (plugin == null) {
+            return Integer.parseInt(String.valueOf(defaultValue));
+        }
+        return plugin.getConfig()
+                     .getInt(getKey(), Integer.parseInt(String.valueOf(defaultValue)));
     }
 
     public boolean asBoolean() {
-        return Rainbow.getInstance()
-                      .getConfig()
-                      .getBoolean(getKey(), (Boolean) defaultValue);
+        Rainbow plugin = Rainbow.getInstance();
+        if (plugin == null) {
+            return Boolean.parseBoolean(String.valueOf(defaultValue));
+        }
+        return plugin.getConfig()
+                     .getBoolean(getKey(), (Boolean) defaultValue);
     }
 
     @Override

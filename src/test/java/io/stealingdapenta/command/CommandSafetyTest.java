@@ -2,24 +2,18 @@ package io.stealingdapenta.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import io.stealingdapenta.RainbowReloadCommand;
 import io.stealingdapenta.config.ConfigKey;
-import io.stealingdapenta.rainbow.Rainbow;
-import java.lang.reflect.Field;
+import java.lang.reflect.Proxy;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.Test;
 
 class CommandSafetyTest {
 
     @Test
-    void rainbowCommandHandlesConsoleSender() throws Exception {
-        installPluginInstance();
-
+    void rainbowCommandHandlesConsoleSender() {
         Command command = new Command("rainbow") {
             @Override
             public boolean execute(CommandSender sender, String commandLabel, String[] args) {
@@ -27,13 +21,11 @@ class CommandSafetyTest {
             }
         };
 
-        assertTrue(new RainbowCommand().onCommand(mock(CommandSender.class), command, "rainbow", new String[0]));
+        assertTrue(new RainbowCommand().onCommand(newConsoleSender(), command, "rainbow", new String[0]));
     }
 
     @Test
-    void rainbowReloadCommandHandlesConsoleSender() throws Exception {
-        installPluginInstance();
-
+    void rainbowReloadCommandHandlesConsoleSender() {
         Command command = new Command("rainbowreload") {
             @Override
             public boolean execute(CommandSender sender, String commandLabel, String[] args) {
@@ -41,7 +33,7 @@ class CommandSafetyTest {
             }
         };
 
-        assertTrue(new RainbowReloadCommand().onCommand(mock(CommandSender.class), command, "rainbowreload", new String[0]));
+        assertTrue(new RainbowReloadCommand().onCommand(newConsoleSender(), command, "rainbowreload", new String[0]));
     }
 
     @Test
@@ -49,16 +41,34 @@ class CommandSafetyTest {
         assertEquals("armor-removed-message", ConfigKey.ARMOR_REMOVED_MESSAGE.getKey());
     }
 
-    private static void installPluginInstance() throws Exception {
-        Rainbow plugin = mock(Rainbow.class);
-        YamlConfiguration config = new YamlConfiguration();
-        for (ConfigKey key : ConfigKey.values()) {
-            config.set(key.getKey(), key.getDefaultValue());
-        }
-        when(plugin.getConfig()).thenReturn(config);
-
-        Field field = Rainbow.class.getDeclaredField("instance");
-        field.setAccessible(true);
-        field.set(null, plugin);
+    private static CommandSender newConsoleSender() {
+        return (CommandSender) Proxy.newProxyInstance(
+                CommandSender.class.getClassLoader(),
+                new Class[]{CommandSender.class},
+                (proxy, method, args) -> {
+                    if (method.getName().equals("sendMessage")) {
+                        return null;
+                    }
+                    if (method.getName().equals("hasPermission")) {
+                        return false;
+                    }
+                    if (method.getName().equals("isPermissionSet")) {
+                        return false;
+                    }
+                    if (method.getName().equals("getName")) {
+                        return "console";
+                    }
+                    if (method.getName().equals("isOp")) {
+                        return false;
+                    }
+                    if (method.getName().equals("setOp")) {
+                        return null;
+                    }
+                    if (method.getName().equals("getServer")) {
+                        return null;
+                    }
+                    return null;
+                }
+        );
     }
 }
