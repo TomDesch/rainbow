@@ -18,7 +18,7 @@ import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.ColorableArmorMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -125,7 +125,7 @@ public class TaggedArmorAnimator extends BukkitRunnable {
      * @param excludedPlayer Players whose items potentially should not be updated (e.g., during open inventory interactions).
      */
     private void applyColorIfRainbowArmor(@Nullable ItemStack item, @Nullable Player excludedPlayer) {
-        if (!ARMOR_PIECE_FACTORY.isRainbowArmorPiece(item) || !(item.getItemMeta() instanceof LeatherArmorMeta meta)) {
+        if (!ARMOR_PIECE_FACTORY.isRainbowArmorPiece(item) || !(item.getItemMeta() instanceof ColorableArmorMeta meta)) {
             return;
         }
 
