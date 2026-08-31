@@ -2,7 +2,7 @@ package io.stealingdapenta.config;
 
 import io.stealingdapenta.rainbow.Rainbow;
 import io.stealingdapenta.util.TextUtil;
-import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public enum ConfigKey {
     CYCLE_SPEED("cycle-speed", 5),
@@ -31,6 +31,11 @@ public enum ConfigKey {
     private final Object defaultValue;
 
     private static final TextUtil textUtil = TextUtil.getInstance();
+    private static final LegacyComponentSerializer legacySerializer = LegacyComponentSerializer.builder()
+                                                                                                 .character('§')
+                                                                                                 .hexColors()
+                                                                                                 .useUnusualXRepeatedCharacterHexFormat()
+                                                                                                 .build();
 
     ConfigKey(String key, Object defaultValue) {
         this.key = key;
@@ -46,8 +51,8 @@ public enum ConfigKey {
         return defaultValue;
     }
 
-    public TextComponent getFormattedMessage() {
-        return textUtil.parseFormattedString(asString());
+    public String getFormattedMessage() {
+        return legacySerializer.serialize(textUtil.parseFormattedString(asString()));
     }
 
     private String asString() {
@@ -82,4 +87,3 @@ public enum ConfigKey {
         return "ConfigKey{" + "key='" + key + '\'' + '}';
     }
 }
-

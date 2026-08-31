@@ -41,6 +41,14 @@ class CommandSafetyTest {
         assertEquals("armor-removed-message", ConfigKey.ARMOR_REMOVED_MESSAGE.getKey());
     }
 
+    @Test
+    void formattedMessagesUseLegacyStringTransport() {
+        String message = ConfigKey.NO_PERMISSION_MESSAGE.getFormattedMessage();
+
+        assertTrue(message.startsWith("§x"));
+        assertTrue(message.contains("You don't have permission"));
+    }
+
     private static CommandSender newConsoleSender() {
         return (CommandSender) Proxy.newProxyInstance(
                 CommandSender.class.getClassLoader(),

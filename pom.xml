@@ -14,7 +14,13 @@
     <dependency>
       <artifactId>spigot-api</artifactId>
       <groupId>org.spigotmc</groupId>
+      <scope>provided</scope>
       <version>1.21.11-R0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <artifactId>adventure-text-serializer-legacy</artifactId>
+      <groupId>net.kyori</groupId>
+      <version>4.25.0</version>
     </dependency>
 
     <!--    Test    -->
@@ -40,6 +46,33 @@
       <url>https://repo.papermc.io/repository/maven-public/</url>
     </repository>
   </repositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <relocations>
+                <relocation>
+                  <pattern>net.kyori</pattern>
+                  <shadedPattern>io.stealingdapenta.lib.kyori</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
   <version>3.3.0</version>
 
