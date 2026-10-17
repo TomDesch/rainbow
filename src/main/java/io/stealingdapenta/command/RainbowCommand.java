@@ -1,6 +1,5 @@
 package io.stealingdapenta.command;
 
-import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
 import static io.stealingdapenta.config.ConfigKey.ARMOR_DISABLED_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.ARMOR_ENABLED_MESSAGE;
@@ -10,6 +9,7 @@ import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.PLAYERS_ONLY_MESSAGE;
 import static io.stealingdapenta.config.PermissionNode.RAINBOW_USE;
 
+import io.stealingdapenta.ArmorListener;
 import io.stealingdapenta.animator.BoundArmorAnimator;
 import io.stealingdapenta.rainbow.Rainbow;
 import java.util.Arrays;
@@ -39,7 +39,7 @@ public class RainbowCommand implements CommandExecutor {
 
         if (playersWearingRainbowArmor.contains(player.getName())) {
             playersWearingRainbowArmor.remove(player.getName());
-            playerInventory.setArmorContents(AIR_ARMOR);
+            playerInventory.setArmorContents(ArmorListener.emptyArmorContents());
             player.sendMessage(ARMOR_DISABLED_MESSAGE.getFormattedMessage());
             return true;
         }

@@ -7,7 +7,6 @@ import static io.stealingdapenta.rainbow.Rainbow.logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,16 +27,12 @@ public class ArmorListener implements Listener {
 
     public static ArrayList<String> playersWearingRainbowArmor = new ArrayList<>();
 
-    public static final ItemStack AIR_ITEM = new ItemStack(Material.AIR);
-    public static final ItemStack[] AIR_ARMOR = {AIR_ITEM, AIR_ITEM, AIR_ITEM, AIR_ITEM};
-
-    // Raw slot indices for armor slots in the player inventory crafting view.
-    // In Paper 1.21 the player inventory raw slots are: 5=helmet, 6=chestplate, 7=leggings, 8=boots.
-    // NOTE: raw slots 36-39 are the HOTBAR, not armor — do NOT include them here.
-    private static final Set<Integer> ARMOR_RAW_SLOTS = Set.of(5, 6, 7, 8);
+    public static ItemStack[] emptyArmorContents() {
+        return new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)};
+    }
 
     private boolean isArmorSlot(InventoryClickEvent event) {
-        return event.getSlotType() == SlotType.ARMOR || ARMOR_RAW_SLOTS.contains(event.getRawSlot());
+        return event.getSlotType() == SlotType.ARMOR;
     }
 
     /**
@@ -51,7 +46,7 @@ public class ArmorListener implements Listener {
 
         if (playersWearingRainbowArmor.remove(player.getName())) {
             player.getInventory()
-                  .setArmorContents(AIR_ARMOR);
+                  .setArmorContents(emptyArmorContents());
         }
     }
 
@@ -129,8 +124,7 @@ public class ArmorListener implements Listener {
 
         logger.fine("[DEBUG CLICK] player=" + player.getName() + " slotType=" + event.getSlotType() + " rawSlot=" + event.getRawSlot() + " slot=" + event.getSlot() + " action=" + event.getAction() + " click=" + event.getClick() + " item=" + (
                 event.getCurrentItem() != null ? event.getCurrentItem()
-                                                      .getType() : "null") + " cursor=" + event.getCursor()
-                                                                                               .getType());
+                                                      .getType() : "null") + " cursor=" + event.getCursor());
 
         // BLOCK: armor slots are fully locked — picking up or placing anything here would dupe or destroy the rainbow piece.
         if (isArmorSlot(event)) {
@@ -188,14 +182,11 @@ public class ArmorListener implements Listener {
             return;
         }
 
-        logger.fine("[DEBUG DRAG] player=" + player.getName() + " rawSlots=" + event.getRawSlots() + " item=" + event.getOldCursor()
-                                                                                                                     .getType());
-
         // BLOCK: dragging onto an armor slot would overwrite the rainbow piece in that slot.
         // ALLOW (implicit): dragging onto any non-armor slot is safe regardless of item type.
         for (int rawSlot : event.getRawSlots()) {
             if (event.getView()
-                     .getSlotType(rawSlot) == SlotType.ARMOR || ARMOR_RAW_SLOTS.contains(rawSlot)) {
+                     .getSlotType(rawSlot) == SlotType.ARMOR) {
                 event.setCancelled(true);
                 player.updateInventory();
                 return;

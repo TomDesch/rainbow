@@ -1,6 +1,6 @@
 package io.stealingdapenta.animator;
 
-import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
+import io.stealingdapenta.ArmorListener;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
 import static io.stealingdapenta.animator.AnimatorUtil.convertCountToRGB;
 import static io.stealingdapenta.config.ConfigKey.CYCLE_SPEED;
@@ -36,7 +36,7 @@ public class BoundArmorAnimator extends BukkitRunnable {
         PlayerInventory playerInventory = player.getInventory();
 
         if (!playersWearingRainbowArmor.contains(player.getName())) {
-            playerInventory.setArmorContents(AIR_ARMOR);
+            playerInventory.setArmorContents(ArmorListener.emptyArmorContents());
             cancel();
             return;
         }

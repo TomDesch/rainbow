@@ -1,6 +1,5 @@
 package io.stealingdapenta.rainbow;
 
-import static io.stealingdapenta.ArmorListener.AIR_ARMOR;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
 
 import io.stealingdapenta.ArmorListener;
@@ -75,7 +74,7 @@ public class Rainbow extends JavaPlugin {
             Player player = Bukkit.getPlayer(playerName);
             if (player != null) {
                 player.getInventory()
-                      .setArmorContents(AIR_ARMOR);
+                      .setArmorContents(ArmorListener.emptyArmorContents());
             } else {
                 logger.warning(PLAYER_NOT_FOUND.formatted(playerName));
             }
