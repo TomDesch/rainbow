@@ -14,8 +14,8 @@ A stylish Spigot plugin for Minecraft 1.21+ that gives players **color-cycling l
 
 ## 📦 Installation
 
-1. Drop `RainbowArmor.jar` into your `plugins/` folder.
-2. Start or reload your server.
+1. Build with `mvn clean verify` and copy the shaded `target/Rainbow-3.3.0.jar` into your `plugins/` folder.
+2. Start or restart your server. Do not use the server-wide `/reload` command.
 3. Customize the plugin in `config.yml` as desired.
 
 ## 📜 Commands
@@ -66,4 +66,3 @@ Plugin created by **StealingDaPenta**
 Have suggestions, feedback, or feature requests? Join the Discord server: [Penta’s Plugin Garage](https://stealingdapenta.be)
 
 ---
-
