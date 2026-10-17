@@ -14,7 +14,7 @@ A stylish Spigot and Paper plugin for Minecraft 26.3+ that gives players **color
 
 ## 📦 Installation
 
-1. Build with JDK 26 using `.\mvnw.cmd -B -ntp clean verify` on Windows or `./mvnw -B -ntp clean verify` elsewhere. Copy the shaded `target/Rainbow-3.3.0.jar` into your `plugins/` folder. The plugin classes target Java 21.
+1. Build with JDK 26 using `.\mvnw.cmd -B -ntp clean verify` on Windows or `./mvnw -B -ntp clean verify` elsewhere. Copy the shaded `target/Rainbow-4.0.0.jar` into your `plugins/` folder. The plugin classes target Java 21.
 2. Start or restart your server. Do not use the server-wide `/reload` command.
 3. Customize the plugin in `config.yml` as desired.
 

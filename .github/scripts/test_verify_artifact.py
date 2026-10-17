@@ -6,7 +6,7 @@ import zipfile
 
 
 CHECKER = Path(__file__).with_name("verify_artifact.py")
-ARTIFACT = Path("target/Rainbow-3.3.0.jar")
+ARTIFACT = Path("target/Rainbow-4.0.0.jar")
 RELOCATED_ANNOTATIONS = "io/stealingdapenta/lib/intellij/lang/annotations/"
 
 

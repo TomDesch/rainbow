@@ -45,6 +45,6 @@ jobs:
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: rainbow-${{ matrix.os }}
-          path: target/Rainbow-3.3.0.jar
+          path: target/Rainbow-4.0.0.jar
           if-no-files-found: error
           retention-days: 7
