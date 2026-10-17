@@ -9,7 +9,9 @@ import static io.stealingdapenta.config.PermissionNode.RAINBOW_HORSE_ARMOR;
 
 import io.stealingdapenta.ArmorPieceFactory;
 import io.stealingdapenta.config.ConfigKey;
+import io.stealingdapenta.config.CycleSpeed;
 import java.util.HashMap;
+import java.util.OptionalInt;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -39,17 +41,14 @@ public class RainbowHorseItemCommand implements CommandExecutor {
             return true;
         }
 
-        int cycleSpeed = ConfigKey.CYCLE_SPEED.asInt(); // Default
+        int cycleSpeed = ConfigKey.CYCLE_SPEED.asInt();
         if (args.length > 0) {
-            try {
-                cycleSpeed = Integer.parseInt(args[0]);
-                if (cycleSpeed <= 0) {
-                    throw new NumberFormatException();
-                }
-            } catch (NumberFormatException e) {
+            OptionalInt parsedSpeed = CycleSpeed.parse(args[0]);
+            if (parsedSpeed.isEmpty()) {
                 player.sendMessage(INVALID_CYCLE_SPEED_MESSAGE.getFormattedMessage());
                 return true;
             }
+            cycleSpeed = parsedSpeed.getAsInt();
         }
 
         ItemStack armorSet = ArmorPieceFactory.ARMOR_PIECE_FACTORY.createHorseArmor(cycleSpeed);

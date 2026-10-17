@@ -1,5 +1,7 @@
 package io.stealingdapenta.config;
 
+import java.util.OptionalInt;
+import java.util.logging.Logger;
 import io.stealingdapenta.rainbow.Rainbow;
 import io.stealingdapenta.util.TextUtil;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -36,6 +38,7 @@ public enum ConfigKey {
                                                                                                  .hexColors()
                                                                                                  .useUnusualXRepeatedCharacterHexFormat()
                                                                                                  .build();
+    private static boolean cycleSpeedWarningLogged;
 
     ConfigKey(String key, Object defaultValue) {
         this.key = key;
@@ -68,6 +71,19 @@ public enum ConfigKey {
         Rainbow plugin = Rainbow.getInstance();
         if (plugin == null) {
             return Integer.parseInt(String.valueOf(defaultValue));
+        }
+        if (this == CYCLE_SPEED) {
+            Object configuredValue = plugin.getConfig().get(getKey(), defaultValue);
+            OptionalInt configuredSpeed = CycleSpeed.parseConfiguredValue(configuredValue);
+            if (configuredSpeed.isPresent()) {
+                return configuredSpeed.getAsInt();
+            }
+            if (!cycleSpeedWarningLogged) {
+                Logger logger = plugin.getLogger();
+                logger.warning("Invalid positive integer for '" + getKey() + "'; using default " + defaultValue + ".");
+                cycleSpeedWarningLogged = true;
+            }
+            return CycleSpeed.fromConfiguration(configuredValue, Integer.parseInt(String.valueOf(defaultValue)));
         }
         return plugin.getConfig()
                      .getInt(getKey(), Integer.parseInt(String.valueOf(defaultValue)));

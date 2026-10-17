@@ -3,6 +3,7 @@ package io.stealingdapenta.command;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
 import static io.stealingdapenta.config.ConfigKey.ARMOR_DISABLED_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.ARMOR_ENABLED_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.CYCLE_SPEED;
 import static io.stealingdapenta.config.ConfigKey.INVALID_CYCLE_SPEED_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.NO_EMPTY_SPACES_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
@@ -11,9 +12,11 @@ import static io.stealingdapenta.config.PermissionNode.RAINBOW_USE;
 
 import io.stealingdapenta.ArmorListener;
 import io.stealingdapenta.animator.BoundArmorAnimator;
+import io.stealingdapenta.config.CycleSpeed;
 import io.stealingdapenta.rainbow.Rainbow;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.OptionalInt;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -49,21 +52,18 @@ public class RainbowCommand implements CommandExecutor {
             return true;
         }
 
-        playersWearingRainbowArmor.add(player.getName());
-
-        BoundArmorAnimator boundArmorAnimator;
-
+        int cycleSpeed = CYCLE_SPEED.asInt();
         if (args.length > 0) {
-            try {
-                boundArmorAnimator = new BoundArmorAnimator(player, Integer.parseInt(args[0]));
-            } catch (NumberFormatException e) {
-                playersWearingRainbowArmor.remove(player.getName());
+            OptionalInt parsedSpeed = CycleSpeed.parse(args[0]);
+            if (parsedSpeed.isEmpty()) {
                 player.sendMessage(INVALID_CYCLE_SPEED_MESSAGE.getFormattedMessage());
-                return false;
+                return true;
             }
-        } else {
-            boundArmorAnimator = new BoundArmorAnimator(player);
+            cycleSpeed = parsedSpeed.getAsInt();
         }
+
+        playersWearingRainbowArmor.add(player.getName());
+        BoundArmorAnimator boundArmorAnimator = new BoundArmorAnimator(player, cycleSpeed);
         boundArmorAnimator.runTaskTimer(Rainbow.getInstance(), 0L, 1L);
         player.sendMessage(ARMOR_ENABLED_MESSAGE.getFormattedMessage());
         return true;

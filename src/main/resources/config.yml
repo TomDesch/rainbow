@@ -8,7 +8,7 @@
 # 🌈 GENERAL SETTINGS
 # ==========================================================
 
-# Cycle speed (animation tick rate). Higher = faster color shifts.
+# Cycle speed (animation tick rate). Must be a positive integer. Higher = faster color shifts.
 cycle-speed: 5
 
 # Whether the /rainbowitem command (item-bound rainbow armor) is enabled.
@@ -75,4 +75,3 @@ check-block-inventories: false
 
 # Whether to animate rainbow armor on horses.
 check-horse-armor: true
-
