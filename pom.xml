@@ -95,6 +95,10 @@
                   <shadedPattern>io.stealingdapenta.lib.annotations</shadedPattern>
                 </relocation>
                 <relocation>
+                  <pattern>org.intellij.lang.annotations</pattern>
+                  <shadedPattern>io.stealingdapenta.lib.intellij.lang.annotations</shadedPattern>
+                </relocation>
+                <relocation>
                   <pattern>org.jspecify</pattern>
                   <shadedPattern>io.stealingdapenta.lib.jspecify</shadedPattern>
                 </relocation>

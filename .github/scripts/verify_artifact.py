@@ -23,6 +23,7 @@ FORBIDDEN_PACKAGES = (
     "net/minecraft/",
     "net/kyori/",
     "org/jetbrains/",
+    "org/intellij/",
     "org/jspecify/",
     "org/yaml/",
     "net/md_5/",
@@ -69,6 +70,7 @@ with zipfile.ZipFile(artifact) as jar:
     for package in (
         RELOCATED_ROOT + "kyori/",
         RELOCATED_ROOT + "annotations/",
+        RELOCATED_ROOT + "intellij/lang/annotations/",
         RELOCATED_ROOT + "jspecify/",
     ):
         require(any(entry.startswith(package) and entry.endswith(".class") for entry in entries),
