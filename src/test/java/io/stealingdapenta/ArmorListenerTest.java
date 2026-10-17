@@ -8,6 +8,7 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -71,11 +72,12 @@ class ArmorListenerTest {
     @Test
     void inventoryDragAllowsContainerSlotFive() {
         Map<Integer, ItemStack> slots = new HashMap<>();
-        slots.put(5, null);
+        ItemStack item = new ItemStack(Material.STONE);
+        slots.put(5, item);
         InventoryDragEvent event = new InventoryDragEvent(
                 newInventoryView(SlotType.CONTAINER),
                 null,
-                null,
+                item,
                 true,
                 slots
         );
@@ -88,11 +90,12 @@ class ArmorListenerTest {
     @Test
     void inventoryDragBlocksArmorSlot() {
         Map<Integer, ItemStack> slots = new HashMap<>();
-        slots.put(5, null);
+        ItemStack item = new ItemStack(Material.STONE);
+        slots.put(5, item);
         InventoryDragEvent event = new InventoryDragEvent(
                 newInventoryView(SlotType.ARMOR),
                 null,
-                null,
+                item,
                 true,
                 slots
         );

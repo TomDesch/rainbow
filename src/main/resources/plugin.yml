@@ -3,7 +3,7 @@ version: 3.3.0
 main: io.stealingdapenta.rainbow.Rainbow
 author: StealingDaPenta
 description: Fancy rainbow armor
-api-version: 1.21
+api-version: '26.3'
 
 commands:
   rainbow:

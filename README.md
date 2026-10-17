@@ -1,6 +1,6 @@
 # 🌈 Rainbow Armor Plugin
 
-A stylish Spigot plugin for Minecraft 1.21+ that gives players **color-cycling leather armor** — because why wear armor when you can wear art?
+A stylish Spigot and Paper plugin for Minecraft 26.3+ that gives players **color-cycling leather armor** - because why wear armor when you can wear art?
 
 ## ✨ Features
 
@@ -14,7 +14,7 @@ A stylish Spigot plugin for Minecraft 1.21+ that gives players **color-cycling l
 
 ## 📦 Installation
 
-1. Build with `mvn clean verify` and copy the shaded `target/Rainbow-3.3.0.jar` into your `plugins/` folder.
+1. Build with JDK 26 using `.\mvnw.cmd -B -ntp clean verify` on Windows or `./mvnw -B -ntp clean verify` elsewhere. Copy the shaded `target/Rainbow-3.3.0.jar` into your `plugins/` folder. The plugin classes target Java 21.
 2. Start or restart your server. Do not use the server-wide `/reload` command.
 3. Customize the plugin in `config.yml` as desired.
 
