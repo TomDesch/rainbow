@@ -9,7 +9,8 @@ import io.stealingdapenta.command.RainbowCommand;
 import io.stealingdapenta.command.RainbowHorseItemCommand;
 import io.stealingdapenta.command.RainbowItemCommand;
 import io.stealingdapenta.config.ConfigKey;
-import java.util.Arrays;
+import io.stealingdapenta.config.ConfigurationDefaults;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -88,15 +89,12 @@ public class Rainbow extends JavaPlugin {
     }
 
     private void initializeConfiguration() {
-        Arrays.stream(ConfigKey.values())
-              .forEach(this::addDefaultValue);
-        getConfig().options()
-                   .copyDefaults(true);
-        saveConfig();
-    }
-
-    private void addDefaultValue(ConfigKey configKey) {
-        getConfig().addDefault(configKey.getKey(), configKey.getDefaultValue());
+        try {
+            ConfigurationDefaults.saveDefaultIfMissing(getDataFolder().toPath().resolve("config.yml"), getResource("config.yml"));
+        } catch (IOException exception) {
+            throw new IllegalStateException("Could not save default config.yml.", exception);
+        }
+        ConfigurationDefaults.addDefaults(getConfig(), ConfigKey.values());
     }
 
     private void registerCommand(String commandName, Object executor) {
