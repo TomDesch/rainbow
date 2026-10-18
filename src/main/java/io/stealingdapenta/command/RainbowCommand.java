@@ -10,8 +10,6 @@ import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
 import static io.stealingdapenta.config.ConfigKey.PLAYERS_ONLY_MESSAGE;
 import static io.stealingdapenta.config.PermissionNode.RAINBOW_USE;
 
-import io.stealingdapenta.ArmorListener;
-import io.stealingdapenta.animator.BoundArmorAnimator;
 import io.stealingdapenta.config.CycleSpeed;
 import io.stealingdapenta.rainbow.Rainbow;
 import java.util.Arrays;
@@ -41,8 +39,7 @@ public class RainbowCommand implements CommandExecutor {
         }
 
         if (playersWearingRainbowArmor.contains(player.getName())) {
-            playersWearingRainbowArmor.remove(player.getName());
-            playerInventory.setArmorContents(ArmorListener.emptyArmorContents());
+            Rainbow.getInstance().getBoundArmorTasks().stop(player);
             player.sendMessage(ARMOR_DISABLED_MESSAGE.getFormattedMessage());
             return true;
         }
@@ -62,9 +59,7 @@ public class RainbowCommand implements CommandExecutor {
             cycleSpeed = parsedSpeed.getAsInt();
         }
 
-        playersWearingRainbowArmor.add(player.getName());
-        BoundArmorAnimator boundArmorAnimator = new BoundArmorAnimator(player, cycleSpeed);
-        boundArmorAnimator.runTaskTimer(Rainbow.getInstance(), 0L, 1L);
+        Rainbow.getInstance().getBoundArmorTasks().start(player, cycleSpeed);
         player.sendMessage(ARMOR_ENABLED_MESSAGE.getFormattedMessage());
         return true;
     }

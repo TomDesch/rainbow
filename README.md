@@ -61,6 +61,8 @@ The config allows you to fine-tune performance vs. visual fidelity. Here's a sum
 
 Tagged worn armor animates once per tick regardless of `check-player-inventory`. That option controls storage and offhand animation, without scanning worn slots a second time.
 
+Player-bound armor has one animation task per player. Toggling it off, quitting, dying, or disabling the plugin cancels that task and removes the temporary armor.
+
 ## 👤 Author
 
 Plugin created by **StealingDaPenta**

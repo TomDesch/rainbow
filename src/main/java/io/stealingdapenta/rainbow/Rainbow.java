@@ -1,9 +1,8 @@
 package io.stealingdapenta.rainbow;
 
-import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
-
 import io.stealingdapenta.ArmorListener;
 import io.stealingdapenta.RainbowReloadCommand;
+import io.stealingdapenta.animator.BoundArmorTasks;
 import io.stealingdapenta.animator.TaggedArmorAnimator;
 import io.stealingdapenta.command.RainbowCommand;
 import io.stealingdapenta.command.RainbowHorseItemCommand;
@@ -13,8 +12,6 @@ import io.stealingdapenta.config.ConfigurationDefaults;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.logging.Logger;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -24,7 +21,6 @@ import org.bukkit.scheduler.BukkitTask;
 public class Rainbow extends JavaPlugin {
 
     public static Logger logger;
-    private static final String PLAYER_NOT_FOUND = "Player %s not found but should exist!";
     private static final String PLUGIN_ENABLED = "Rainbow armor plugin enabled.";
     private static final String PLUGIN_DISABLED = "Rainbow armor plugin disabled.";
     private static Rainbow instance;
@@ -36,6 +32,7 @@ public class Rainbow extends JavaPlugin {
     private final RainbowHorseItemCommand rainbowHorseItemCommand = new RainbowHorseItemCommand();
 
     private BukkitTask armorAnimatorTask;
+    private final BoundArmorTasks boundArmorTasks = new BoundArmorTasks(animator -> animator.runTaskTimer(this, 0L, 1L));
 
     @Override
     public void onEnable() {
@@ -71,15 +68,7 @@ public class Rainbow extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        playersWearingRainbowArmor.forEach(playerName -> {
-            Player player = Bukkit.getPlayer(playerName);
-            if (player != null) {
-                player.getInventory()
-                      .setArmorContents(ArmorListener.emptyArmorContents());
-            } else {
-                logger.warning(PLAYER_NOT_FOUND.formatted(playerName));
-            }
-        });
+        boundArmorTasks.stopAll();
 
         if (armorAnimatorTask != null) {
             armorAnimatorTask.cancel();
@@ -108,5 +97,9 @@ public class Rainbow extends JavaPlugin {
 
     public static Rainbow getInstance() {
         return instance;
+    }
+
+    public BoundArmorTasks getBoundArmorTasks() {
+        return boundArmorTasks;
     }
 }

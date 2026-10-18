@@ -1,9 +1,7 @@
 package io.stealingdapenta.animator;
 
-import io.stealingdapenta.ArmorListener;
 import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
 import static io.stealingdapenta.animator.AnimatorUtil.convertCountToRGB;
-import static io.stealingdapenta.config.ConfigKey.CYCLE_SPEED;
 
 import java.util.function.Consumer;
 import org.bukkit.Color;
@@ -20,27 +18,26 @@ public class BoundArmorAnimator extends BukkitRunnable {
     private int count = 0;
     private static final int THRESHOLD = 5000;
     private final int cycleSpeed;
+    private final BoundArmorTasks owner;
 
 
-    public BoundArmorAnimator(Player player) {
-        this.cycleSpeed = CYCLE_SPEED.asInt();
-        this.player = player;
-    }
-
-    public BoundArmorAnimator(Player player, int cycleSpeed) {
+    BoundArmorAnimator(Player player, int cycleSpeed, BoundArmorTasks owner) {
         this.player = player;
         this.cycleSpeed = cycleSpeed;
+        this.owner = owner;
     }
 
     public void run() {
-        PlayerInventory playerInventory = player.getInventory();
-
-        if (!playersWearingRainbowArmor.contains(player.getName())) {
-            playerInventory.setArmorContents(ArmorListener.emptyArmorContents());
-            cancel();
+        if (!owner.isCurrent(player, this)) {
             return;
         }
 
+        if (!playersWearingRainbowArmor.contains(player.getName())) {
+            owner.stop(player);
+            return;
+        }
+
+        PlayerInventory playerInventory = player.getInventory();
         Color armorColor = convertCountToRGB(count);
         setArmor(playerInventory, armorColor);
         count += cycleSpeed;

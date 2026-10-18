@@ -5,6 +5,7 @@ import static io.stealingdapenta.config.ConfigKey.ARMOR_SHIFT_CLICK_BLOCKED_MESS
 import static io.stealingdapenta.config.ConfigKey.CHECK_HORSES;
 import static io.stealingdapenta.rainbow.Rainbow.logger;
 
+import io.stealingdapenta.rainbow.Rainbow;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.bukkit.Material;
@@ -44,10 +45,7 @@ public class ArmorListener implements Listener {
     public void playerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        if (playersWearingRainbowArmor.remove(player.getName())) {
-            player.getInventory()
-                  .setArmorContents(emptyArmorContents());
-        }
+        Rainbow.getInstance().getBoundArmorTasks().stop(player);
     }
 
     /**
@@ -59,12 +57,13 @@ public class ArmorListener implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        if (playersWearingRainbowArmor.remove(player.getName())) {
+        if (playersWearingRainbowArmor.contains(player.getName())) {
             player.sendMessage(ARMOR_REMOVED_MESSAGE.getFormattedMessage());
 
             PlayerInventory inv = player.getInventory();
             event.getDrops()
                  .removeAll(Arrays.asList(inv.getHelmet(), inv.getChestplate(), inv.getLeggings(), inv.getBoots()));
+            Rainbow.getInstance().getBoundArmorTasks().stop(player);
         }
     }
 
