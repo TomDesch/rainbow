@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TaggedArmorAnimator extends BukkitRunnable {
 
-    public static final long TICK_PERIOD = 5L;
+    public static final long TICK_PERIOD = 1L;
     private static final int THRESHOLD = 5000;
 
     @Override
