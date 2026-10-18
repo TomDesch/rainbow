@@ -63,10 +63,4 @@ Tagged worn armor animates once per tick regardless of `check-player-inventory`.
 
 Player-bound armor has one animation task per player. Toggling it off, quitting, dying, or disabling the plugin cancels that task and removes the temporary armor.
 
-## 👤 Author
-
-Plugin created by **StealingDaPenta**
-
-Have suggestions, feedback, or feature requests? Join the Discord server: [Penta’s Plugin Garage](https://stealingdapenta.be)
-
 ---

@@ -1,4 +1,5 @@
 target/
+/.github/copilot-instructions.md
 
 ### IntelliJ IDEA ###
 .idea/
