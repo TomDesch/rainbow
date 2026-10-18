@@ -46,6 +46,19 @@ class TaggedArmorAnimatorTest {
         }
     }
 
+    @Test
+    void animatePlayerAdvancesWornStorageAndOffhandItemsExactlyOnce() {
+        TaggedItem worn = new TaggedItem(ColorableArmorMeta.class);
+        TaggedItem stored = new TaggedItem(ColorableArmorMeta.class);
+        TaggedItem offhand = new TaggedItem(LeatherArmorMeta.class);
+
+        new TaggedArmorAnimator().animatePlayer(player(new ItemStack[]{worn}, new ItemStack[]{stored}, offhand));
+
+        for (TaggedItem item : List.of(worn, stored, offhand)) {
+            assertEquals(5, item.values.get(ArmorPieceFactory.getColorCountKey()));
+        }
+    }
+
     private static Player player(ItemStack[] armor, ItemStack[] storage, ItemStack offhand) {
         PlayerInventory inventory = (PlayerInventory) Proxy.newProxyInstance(PlayerInventory.class.getClassLoader(),
                 new Class<?>[]{PlayerInventory.class}, (proxy, method, args) -> switch (method.getName()) {

@@ -19,6 +19,7 @@ import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -114,10 +115,11 @@ public class TaggedArmorAnimator extends BukkitRunnable {
      * Applies the animation color to all rainbow armor pieces in a given inventory.
      */
     private void animateInventoryFor(@NotNull Player player) {
-        for (ItemStack item : player.getInventory()
-                                    .getContents()) {
+        PlayerInventory inventory = player.getInventory();
+        for (ItemStack item : inventory.getStorageContents()) {
             applyColorIfRainbowArmor(item, player);
         }
+        applyColorIfRainbowArmor(inventory.getItemInOffHand(), player);
     }
 
     /**

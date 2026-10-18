@@ -59,6 +59,8 @@ The config allows you to fine-tune performance vs. visual fidelity. Here's a sum
 - `armor-item-feature`: Whether `/rainbowitem` is enabled.
 - `check-block-inventories`, etc.: Toggle which inventories/entities are to animate items in.
 
+Tagged worn armor animates once per tick regardless of `check-player-inventory`. That option controls storage and offhand animation, without scanning worn slots a second time.
+
 ## 👤 Author
 
 Plugin created by **StealingDaPenta**
