@@ -16,10 +16,6 @@ import org.bukkit.persistence.PersistentDataType;
 public enum ArmorPieceFactory {
     ARMOR_PIECE_FACTORY;
 
-    public static final Material HELMET_MATERIAL = Material.LEATHER_HELMET;
-    public static final Material CHESTPLATE_MATERIAL = Material.LEATHER_CHESTPLATE;
-    public static final Material LEGGINGS_MATERIAL = Material.LEATHER_LEGGINGS;
-    public static final Material BOOTS_MATERIAL = Material.LEATHER_BOOTS;
     private static final NamespacedKey ARMOR_TAG_KEY = new NamespacedKey("rainbowarmor", "rainbow-armor");
     private static final NamespacedKey SPEED_TAG_KEY = new NamespacedKey("rainbowarmor", "cycle-speed");
     private static final NamespacedKey COLOR_COUNT_KEY = new NamespacedKey("rainbowarmor", "color-count");
@@ -31,7 +27,10 @@ public enum ArmorPieceFactory {
      * @return An array containing the helmet, chestplate, leggings, and boots.
      */
     public ItemStack[] createArmorSet(int cycleSpeed) {
-        return new ItemStack[]{createArmorPiece(HELMET_MATERIAL, cycleSpeed), createArmorPiece(CHESTPLATE_MATERIAL, cycleSpeed), createArmorPiece(LEGGINGS_MATERIAL, cycleSpeed), createArmorPiece(BOOTS_MATERIAL, cycleSpeed)};
+        return new ItemStack[]{createArmorPiece(Material.LEATHER_HELMET, cycleSpeed),
+                createArmorPiece(Material.LEATHER_CHESTPLATE, cycleSpeed),
+                createArmorPiece(Material.LEATHER_LEGGINGS, cycleSpeed),
+                createArmorPiece(Material.LEATHER_BOOTS, cycleSpeed)};
     }
 
     /**

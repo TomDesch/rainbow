@@ -53,29 +53,10 @@ class CommandSafetyTest {
         return (CommandSender) Proxy.newProxyInstance(
                 CommandSender.class.getClassLoader(),
                 new Class[]{CommandSender.class},
-                (proxy, method, args) -> {
-                    if (method.getName().equals("sendMessage")) {
-                        return null;
-                    }
-                    if (method.getName().equals("hasPermission")) {
-                        return false;
-                    }
-                    if (method.getName().equals("isPermissionSet")) {
-                        return false;
-                    }
-                    if (method.getName().equals("getName")) {
-                        return "console";
-                    }
-                    if (method.getName().equals("isOp")) {
-                        return false;
-                    }
-                    if (method.getName().equals("setOp")) {
-                        return null;
-                    }
-                    if (method.getName().equals("getServer")) {
-                        return null;
-                    }
-                    return null;
+                (proxy, method, args) -> switch (method.getName()) {
+                    case "hasPermission", "isPermissionSet", "isOp" -> false;
+                    case "getName" -> "console";
+                    default -> null;
                 }
         );
     }
