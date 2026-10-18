@@ -13,6 +13,7 @@ import io.stealingdapenta.rainbow.Rainbow;
 import io.stealingdapenta.util.ArmorColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
@@ -129,19 +130,22 @@ public class TaggedArmorAnimator extends BukkitRunnable {
      * @param excludedPlayer Players whose items potentially should not be updated (e.g., during open inventory interactions).
      */
     private void applyColorIfRainbowArmor(@Nullable ItemStack item, @Nullable Player excludedPlayer) {
-        if (!ARMOR_PIECE_FACTORY.isRainbowArmorPiece(item)) {
+        if (item == null || item.getType() == Material.AIR) {
+            return;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return;
+        }
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        if (!container.has(ArmorPieceFactory.getArmorTagKey(), PersistentDataType.BYTE)) {
             return;
         }
 
         // Prevent updating items currently held on the cursor (avoids visual/duplication glitches)
         if (excludedPlayer != null && ARMOR_PIECE_FACTORY.isRainbowArmorPiece(excludedPlayer.getItemOnCursor())) {
             return; // Skip the item if it's held on the cursor to prevent any further animation updates
-        }
-
-        ItemMeta meta = item.getItemMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        if (!container.has(ArmorPieceFactory.getArmorTagKey())) {
-            return;
         }
 
         int count = container.getOrDefault(getColorCountKey(), PersistentDataType.INTEGER, 0);

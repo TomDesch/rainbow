@@ -20,9 +20,9 @@ public enum ArmorPieceFactory {
     public static final Material CHESTPLATE_MATERIAL = Material.LEATHER_CHESTPLATE;
     public static final Material LEGGINGS_MATERIAL = Material.LEATHER_LEGGINGS;
     public static final Material BOOTS_MATERIAL = Material.LEATHER_BOOTS;
-    private static final String ARMOR_TAG_KEY = "rainbow-armor";
-    private static final String SPEED_TAG_KEY = "cycle-speed";
-    private static final String COLOR_COUNT_KEY = "color-count";
+    private static final NamespacedKey ARMOR_TAG_KEY = new NamespacedKey("rainbowarmor", "rainbow-armor");
+    private static final NamespacedKey SPEED_TAG_KEY = new NamespacedKey("rainbowarmor", "cycle-speed");
+    private static final NamespacedKey COLOR_COUNT_KEY = new NamespacedKey("rainbowarmor", "color-count");
 
     /**
      * Creates a full set of leather armor tagged as rainbow armor with a given cycle speed.
@@ -66,21 +66,21 @@ public enum ArmorPieceFactory {
      * @return The NamespacedKey used to store the counter of the current color of rainbow armor.
      */
     public static NamespacedKey getColorCountKey() {
-        return new NamespacedKey("rainbowarmor", COLOR_COUNT_KEY);
+        return COLOR_COUNT_KEY;
     }
 
     /**
      * @return The NamespacedKey used to identify rainbow armor items.
      */
     public static NamespacedKey getArmorTagKey() {
-        return new NamespacedKey("rainbowarmor", ARMOR_TAG_KEY);
+        return ARMOR_TAG_KEY;
     }
 
     /**
      * @return The NamespacedKey used to store the cycle speed of rainbow armor.
      */
     public static NamespacedKey getCycleSpeedKey() {
-        return new NamespacedKey("rainbowarmor", SPEED_TAG_KEY);
+        return SPEED_TAG_KEY;
     }
 
     /**
