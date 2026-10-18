@@ -1,0 +1,71 @@
+package io.stealingdapenta.command;
+
+import static io.stealingdapenta.ArmorListener.playersWearingRainbowArmor;
+import static io.stealingdapenta.config.ConfigKey.ARMOR_DISABLED_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.ARMOR_ENABLED_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.CYCLE_SPEED;
+import static io.stealingdapenta.config.ConfigKey.INVALID_CYCLE_SPEED_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.NO_EMPTY_SPACES_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.NO_PERMISSION_MESSAGE;
+import static io.stealingdapenta.config.ConfigKey.PLAYERS_ONLY_MESSAGE;
+import static io.stealingdapenta.config.PermissionNode.RAINBOW_USE;
+
+import io.stealingdapenta.config.CycleSpeed;
+import io.stealingdapenta.rainbow.Rainbow;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.OptionalInt;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
+
+public class RainbowCommand implements CommandExecutor {
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String @NotNull [] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(PLAYERS_ONLY_MESSAGE.getFormattedMessage());
+            return true;
+        }
+
+        PlayerInventory playerInventory = player.getInventory();
+
+        if (!player.hasPermission(RAINBOW_USE.getNode())) {
+            player.sendMessage(NO_PERMISSION_MESSAGE.getFormattedMessage());
+            return true;
+        }
+
+        if (playersWearingRainbowArmor.contains(player.getName())) {
+            Rainbow.getInstance().getBoundArmorTasks().stop(player);
+            player.sendMessage(ARMOR_DISABLED_MESSAGE.getFormattedMessage());
+            return true;
+        }
+
+        if (hasOccupiedArmorSlot(playerInventory)) {
+            player.sendMessage(NO_EMPTY_SPACES_MESSAGE.getFormattedMessage());
+            return true;
+        }
+
+        int cycleSpeed = CYCLE_SPEED.asInt();
+        if (args.length > 0) {
+            OptionalInt parsedSpeed = CycleSpeed.parse(args[0]);
+            if (parsedSpeed.isEmpty()) {
+                player.sendMessage(INVALID_CYCLE_SPEED_MESSAGE.getFormattedMessage());
+                return true;
+            }
+            cycleSpeed = parsedSpeed.getAsInt();
+        }
+
+        Rainbow.getInstance().getBoundArmorTasks().start(player, cycleSpeed);
+        player.sendMessage(ARMOR_ENABLED_MESSAGE.getFormattedMessage());
+        return true;
+    }
+
+    private boolean hasOccupiedArmorSlot(PlayerInventory inventory) {
+        return Arrays.stream(inventory.getArmorContents())
+                     .anyMatch(Objects::nonNull);
+    }
+}
