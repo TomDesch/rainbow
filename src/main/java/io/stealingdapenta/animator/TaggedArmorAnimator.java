@@ -10,6 +10,7 @@ import static io.stealingdapenta.config.ConfigKey.CHECK_PLAYER_INVENTORY;
 import io.stealingdapenta.ArmorPieceFactory;
 import io.stealingdapenta.config.ConfigKey;
 import io.stealingdapenta.rainbow.Rainbow;
+import io.stealingdapenta.util.ArmorColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -18,7 +19,7 @@ import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ColorableArmorMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -126,7 +127,7 @@ public class TaggedArmorAnimator extends BukkitRunnable {
      * @param excludedPlayer Players whose items potentially should not be updated (e.g., during open inventory interactions).
      */
     private void applyColorIfRainbowArmor(@Nullable ItemStack item, @Nullable Player excludedPlayer) {
-        if (!ARMOR_PIECE_FACTORY.isRainbowArmorPiece(item) || !(item.getItemMeta() instanceof ColorableArmorMeta meta)) {
+        if (!ARMOR_PIECE_FACTORY.isRainbowArmorPiece(item)) {
             return;
         }
 
@@ -135,6 +136,7 @@ public class TaggedArmorAnimator extends BukkitRunnable {
             return; // Skip the item if it's held on the cursor to prevent any further animation updates
         }
 
+        ItemMeta meta = item.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
         if (!container.has(ArmorPieceFactory.getArmorTagKey())) {
             return;
@@ -143,7 +145,9 @@ public class TaggedArmorAnimator extends BukkitRunnable {
         int count = container.getOrDefault(getColorCountKey(), PersistentDataType.INTEGER, 0);
         int speed = container.getOrDefault(getCycleSpeedKey(), PersistentDataType.INTEGER, 5);
 
-        meta.setColor(AnimatorUtil.convertCountToRGB(count));
+        if (!ArmorColor.setColor(meta, AnimatorUtil.convertCountToRGB(count))) {
+            return;
+        }
 
         // Save updated state BEFORE setting item meta
         count = advanceColorCount(count, speed);

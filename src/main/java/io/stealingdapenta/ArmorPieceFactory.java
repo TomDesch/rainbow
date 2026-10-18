@@ -1,11 +1,11 @@
 package io.stealingdapenta;
 
 import io.stealingdapenta.rainbow.Rainbow;
+import io.stealingdapenta.util.ArmorColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ColorableArmorMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -103,9 +103,7 @@ public enum ArmorPieceFactory {
             return null;
         }
 
-        if (meta instanceof ColorableArmorMeta colorableArmorMeta) {
-            colorableArmorMeta.setColor(Color.GREEN);
-        }
+        ArmorColor.setColor(meta, Color.GREEN);
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(getArmorTagKey(), PersistentDataType.BYTE, (byte) 1);
